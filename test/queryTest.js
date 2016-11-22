@@ -25,7 +25,7 @@ describe('Query', function () {
     });
 
     // test cases
-    it('should list ALL nodes on /nodes GET', function (done) {
+      it('should list ALL nodes on /nodes GET', function (done) {
       chai.request('http://localhost:15631/x-nmos/query/v1.0')
         .get('/nodes')
         .end(function (err, res) {
@@ -33,7 +33,5 @@ describe('Query', function () {
           done();
         });
     });
-
-    it('should test something else');
   });
 });
