@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive test/",
-    "test-xunit": "mocha --recursive -R xunit test/ > test-reports.xml"
+    "test-xunit": "mocha --recursive -R mocha-jenkins-reporter --reporter-options junit_report_path=test-reports.xml test/"
   },
   "keywords": [
     "unit",
@@ -14,11 +14,11 @@
   ],
   "author": "ulrich.heiniger@lawo.com",
   "license": "ISC",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
-    "mocha": "^3.1.2"
+    "mocha": "^3.1.2",
+    "mocha-jenkins-reporter": "^0.3.1"
   }
 }
