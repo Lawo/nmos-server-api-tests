@@ -1,7 +1,6 @@
-var chai = require('chai');
-var chaiHttp = require('chai-http');
-var assert = chai.assert;
-
+import { assert } from 'chai';
+import * as chai from 'chai';
+import chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
 describe('Query', function () {
