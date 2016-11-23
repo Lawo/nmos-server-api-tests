@@ -4,10 +4,9 @@
   "description": "Test project for mocha",
   "main": "index.js",
   "scripts": {
-    "pretest": "tsc",
+    "build": "tslint test/*.ts && tsc",
     "test": "mocha --recursive dist/",
-    "test-xunit": "mocha --recursive -R mocha-jenkins-reporter --reporter-options junit_report_path=test-reports.xml dist/",
-    "lint": "tslint test/*.ts"
+    "test-xunit": "mocha --recursive -R mocha-jenkins-reporter --reporter-options junit_report_path=test-reports.xml dist/"
   },
   "keywords": [
     "unit",
