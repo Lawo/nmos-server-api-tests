@@ -5,15 +5,25 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Run Tests",
       "type": "node",
       "request": "launch",
-      "name": "Mocha-Chai Debugging",
-      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
       "cwd": "${workspaceRoot}",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
       "args": [
         "--recursive",
-        "test/"
-      ]
+        "-u",
+        "tdd",
+        "--timeout",
+        "999999",
+        "--colors",
+        "./dist"
+      ],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "sourceMaps": true,
+      "outDir": "${workspaceRoot}/dist"
     }
   ]
 }
