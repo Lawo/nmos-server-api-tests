@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tslint test/*.ts && tsc",
+    "pretest": "tsc",
     "test": "mocha --recursive dist/",
     "test-xunit": "mocha --recursive -R mocha-jenkins-reporter --reporter-options junit_report_path=test-reports.xml dist/"
   },

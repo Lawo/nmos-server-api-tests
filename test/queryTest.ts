@@ -1,9 +1,30 @@
 import { assert } from 'chai';
+import { expect } from 'chai';
+
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
-describe('Query', function () {
+// Add promise support if this does not exist natively.
+if (!global.Promise) {
+  let q = require('q');
+  chai.request.addPromises(q.Promise);
+}
+
+describe('Query', () => {
+
+  describe('Base', () => {
+    it('should return list of paths available from this API - traditional', (done) => {
+      chai.request('http://localhost:15631/x-nmos/query/v1.0')
+        .get('/')
+        .end(function (err, res) {
+          assert.equal(res.status, 200);
+          assert.equal(res.type, 'application/json');
+          done();
+        });
+    });
+
+  });
 
   describe('Nodes', function () {
     // hooks
