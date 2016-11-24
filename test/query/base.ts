@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { Url } from './../url';
 
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
@@ -8,7 +9,7 @@ describe('Query', () => {
   describe('Base (/)', () => {
 
     it('should return list of paths available from this API', (done) => {
-      chai.request('http://localhost:15631/x-nmos/query/v1.0')
+      chai.request(Url.Query)
         .get('/')
         .end(function (err, res) {
           expect(res).to.have.status(200);

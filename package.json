@@ -1,7 +1,7 @@
 {
-  "name": "testmocha",
+  "name": "apitests",
   "version": "1.0.0",
-  "description": "Test project for mocha",
+  "description": "Tests for the nmos-server REST-API",
   "main": "index.js",
   "scripts": {
     "build": "tslint test/*.ts && tsc",
@@ -10,11 +10,6 @@
     "test": "mocha --recursive dist/",
     "test-xunit": "mocha --recursive -R mocha-jenkins-reporter --reporter-options junit_report_path=test-reports.xml dist/"
   },
-  "keywords": [
-    "unit",
-    "test",
-    "mocha"
-  ],
   "author": "ulrich.heiniger@lawo.com",
   "license": "ISC",
   "dependencies": {
