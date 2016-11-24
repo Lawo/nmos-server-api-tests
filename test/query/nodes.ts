@@ -8,8 +8,10 @@ chai.use(chaiHttp);
 describe('Query', () => {
 
   describe('Nodes', () => {
+
     // hooks
     before((done) => {
+      // add test node
       let body = {
         'type': 'node',
         'data': {
@@ -32,22 +34,17 @@ describe('Query', () => {
         .post('/resource')
         .send(body)
         .end((err, res) => {
-          let test = res.status;
-          console.log(test);
           done();
         });
     });
 
-    after(function () {
-      // console.log('runs after all tests in this block');
-    });
-
-    beforeEach(function () {
-      // console.log('runs before each test in this block');
-    });
-
-    afterEach(function () {
-      // console.log('runs after each test in this block');
+    after((done) => {
+      // remove test node
+      chai.request('http://localhost:15631/x-nmos/registration/v1.0')
+        .del('/resource/nodes/3b8be755-08ff-452b-b217-c9151eb21193')
+        .end((err, res) => {
+          done();
+        });
     });
 
     // test cases
