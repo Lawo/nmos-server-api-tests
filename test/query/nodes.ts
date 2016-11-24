@@ -63,8 +63,26 @@ describe('Query', () => {
         .get('/nodes')
         .end((err, res) => {
           expect(res).to.have.status(200);
-          expect(res).to.be.json;
           expect(res.body.some((e: any) => e.label === 'TestNode1')).to.be.true;
+          done();
+        });
+    });
+
+    it('should get a single node by id', (done) => {
+      chai.request(Url.Query)
+        .get('/nodes/3b8be755-08ff-452b-b217-c9151eb21193')
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body.label === 'TestNode1').to.be.true;
+          done();
+        });
+    });
+
+    it('should return an error when the requested node id does not exist', (done) => {
+      chai.request(Url.Query)
+        .get('/nodes/wrong id')
+        .end((err, res) => {
+          expect(res).to.have.status(404);
           done();
         });
     });
