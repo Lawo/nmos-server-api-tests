@@ -48,7 +48,7 @@ describe('Query', () => {
     });
 
     // test cases
-    it('should list ALL nodes on /nodes GET', (done) => {
+    it('should list all nodes on /nodes GET', (done) => {
       chai.request(Url.Query)
         .get('/nodes')
         .end((err, res) => {
@@ -98,7 +98,7 @@ describe('Query', () => {
         .get('/nodes/3b8be755-08ff-452b-b217-c9151eb21193')
         .end((err, res) => {
           expect(res).to.have.status(200);
-          expect(res.body.label === 'TestNode1').to.be.true;
+          expect(res.body.label).to.equal('TestNode1');
           done();
         });
     });
@@ -111,5 +111,6 @@ describe('Query', () => {
           done();
         });
     });
+
   });
 });
