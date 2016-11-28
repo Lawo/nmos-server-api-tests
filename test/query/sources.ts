@@ -8,12 +8,7 @@ chai.use(chaiHttp);
 describe('Query', () => {
   describe('Sources', () => {
 
-    // hooks
-    before((done) => {
-      // add test source
-      let body = {
-        'type': 'source',
-        'data': {
+    let testSource = {
           'description': 'Camera 1',
           'format': 'urn:x-nmos:format:video',
           'tags': {
@@ -33,7 +28,14 @@ describe('Query', () => {
           'label': 'TestSource1',
           'id': '042a4126-0208-443d-bda6-833ffc27ed51',
           'device_id': '21a28338-fb2e-4df5-9b55-d58e6124bc9f'
-        }
+    };
+
+    // hooks
+    before((done) => {
+      // add test source
+      let body = {
+        'type': 'source',
+        'data': testSource
       };
 
       chai.request(Url.Registration)
@@ -47,7 +49,7 @@ describe('Query', () => {
     after((done) => {
       // remove test source
       chai.request(Url.Registration)
-        .del('/resource/sources/042a4126-0208-443d-bda6-833ffc27ed51')
+        .del('/resource/sources/' + testSource.id)
         .end((err, res) => {
           done();
         });
@@ -100,7 +102,7 @@ describe('Query', () => {
         .get('/sources')
         .end((err, res) => {
           expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.label === 'TestSource1')).to.be.true;
+          expect(res.body.some((entry: any) => entry.label === testSource.label)).to.be.true;
           done();
         });
     });
@@ -108,10 +110,10 @@ describe('Query', () => {
     it('should return the desired source by device_id', (done) => {
       chai.request(Url.Query)
         .get('/sources')
-        .field('device_id', '21a28338-fb2e-4df5-9b55-d58e6124bc9f')
+        .field('device_id', testSource.device_id)
         .end((err, res) => {
           expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.label === 'TestSource1')).to.be.true;
+          expect(res.body.some((entry: any) => entry.device_id === testSource.device_id)).to.be.true;
           done();
         });
     });
@@ -119,10 +121,10 @@ describe('Query', () => {
     it('should return the desired source by label', (done) => {
       chai.request(Url.Query)
         .get('/sources')
-        .field('label', 'TestSource1')
+        .field('label', testSource.label)
         .end((err, res) => {
           expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.label === 'TestSource1')).to.be.true;
+          expect(res.body.some((entry: any) => entry.label === testSource.label)).to.be.true;
           done();
         });
     });
@@ -130,10 +132,10 @@ describe('Query', () => {
     it('should return the desired source by description', (done) => {
       chai.request(Url.Query)
         .get('/sources')
-        .field('description', 'Camera 1')
+        .field('description', testSource.description)
         .end((err, res) => {
           expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.label === 'TestSource1')).to.be.true;
+          expect(res.body.some((entry: any) => entry.description === testSource.description)).to.be.true;
           done();
         });
     });
@@ -141,20 +143,20 @@ describe('Query', () => {
     it('should return the desired source by format', (done) => {
       chai.request(Url.Query)
         .get('/sources')
-        .field('format', 'urn:x-nmos:format:video')
+        .field('format', testSource.format)
         .end((err, res) => {
           expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.label === 'TestSource1')).to.be.true;
+          expect(res.body.some((entry: any) => entry.format === testSource.format)).to.be.true;
           done();
         });
     });
 
     it('should get a single source by id', (done) => {
       chai.request(Url.Query)
-        .get('/sources/042a4126-0208-443d-bda6-833ffc27ed51')
+        .get('/sources/' + testSource.id)
         .end((err, res) => {
           expect(res).to.have.status(200);
-          expect(res.body.label).to.equal('TestSource1');
+          expect(res.body.label).to.equal(testSource.label);
           done();
         });
     });
