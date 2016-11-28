@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 describe('Query', () => {
   describe('Base (/)', () => {
 
-    it('should return list of paths available from this API', (done) => {
+    it('GET should return list of paths available from this API', (done) => {
       chai.request(Url.Query)
         .get('/')
         .end(function (err, res) {
@@ -24,5 +24,24 @@ describe('Query', () => {
           done();
         });
     });
+
+    it('OPTIONS should return empty answer and Status OK.', (done) => {
+      chai.request(Url.Query)
+        .options('/')
+        .end(function (err, res) {
+          expect(res).to.have.status(200);
+          done();
+        });
+    });
+
+    it('POST should not be supported.', (done) => {
+      chai.request(Url.Query)
+        .post('/')
+        .end(function (err, res) {
+          expect(res).to.have.status(405);
+          done();
+        });
+    });
+
   });
 });
