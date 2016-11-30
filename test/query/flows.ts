@@ -22,27 +22,11 @@ describe('Query', () => {
 
     // hooks
     before((done) => {
-      // add test flow
-      let body = {
-        'type': 'flow',
-        'data': testFlow
-      };
-
-      chai.request(Url.Registration)
-        .post('/resource')
-        .send(body)
-        .end((err, res) => {
-          done();
-        });
+      QueryUtil.addResource(done, Url.Registration, 'flow', testFlow);
     });
 
     after((done) => {
-      // remove test flow
-      chai.request(Url.Registration)
-        .del('/resource/flows/' + testFlow.id)
-        .end((err, res) => {
-          done();
-        });
+      QueryUtil.removeResource(done, Url.Registration, '/flows', testFlow.id);
     });
 
     // test cases
@@ -80,76 +64,31 @@ describe('Query', () => {
     });
 
     it('should contain the test flows', (done) => {
-      chai.request(Url.Query)
-        .get('/flows')
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.label === testFlow.label)).to.be.true;
-          done();
-        });
+      QueryUtil.containTestResource(done, Url.Query, '/flows', testFlow.label);
     });
 
     it('should return the desired flow by source_id', (done) => {
-      chai.request(Url.Query)
-        .get('/flows')
-        .field('source_id', testFlow.source_id)
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.source_id === testFlow.source_id)).to.be.true;
-          done();
-        });
+      QueryUtil.getResourceByParameter(done, Url.Query, '/flows', 'source_id', testFlow.source_id);
     });
 
     it('should return the desired flow by label', (done) => {
-      chai.request(Url.Query)
-        .get('/flows')
-        .field('label', testFlow.label)
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.label === testFlow.label)).to.be.true;
-          done();
-        });
+      QueryUtil.getResourceByParameter(done, Url.Query, '/flows', 'label', testFlow.label);
     });
 
     it('should return the desired flow by description', (done) => {
-      chai.request(Url.Query)
-        .get('/flows')
-        .field('description', testFlow.description)
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.description === testFlow.description)).to.be.true;
-          done();
-        });
+      QueryUtil.getResourceByParameter(done, Url.Query, '/flows', 'description', testFlow.description);
     });
 
     it('should return the desired flow by format', (done) => {
-      chai.request(Url.Query)
-        .get('/flows')
-        .field('format', testFlow.format)
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.format === testFlow.format)).to.be.true;
-          done();
-        });
+      QueryUtil.getResourceByParameter(done, Url.Query, '/flows', 'format', testFlow.format);
     });
 
     it('should get a single flow by id', (done) => {
-      chai.request(Url.Query)
-        .get('/flows/' + testFlow.id)
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body.label).to.equal(testFlow.label);
-          done();
-        });
+      QueryUtil.getSingleResourceById(done, Url.Query, '/flows', testFlow.id);
     });
 
     it('should return an error when the requested flow id does not exist', (done) => {
-      chai.request(Url.Query)
-        .get('/flows/wrong id')
-        .end((err, res) => {
-          expect(res).to.have.status(404);
-          done();
-        });
+      QueryUtil.failGetNonExistentResource(done, Url.Query, '/flows');
     });
 
   });

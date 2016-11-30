@@ -33,27 +33,11 @@ describe('Query', () => {
 
     // hooks
     before((done) => {
-      // add test source
-      let body = {
-        'type': 'source',
-        'data': testSource
-      };
-
-      chai.request(Url.Registration)
-        .post('/resource')
-        .send(body)
-        .end((err, res) => {
-          done();
-        });
+      QueryUtil.addResource(done, Url.Registration, 'source', testSource);
     });
 
     after((done) => {
-      // remove test source
-      chai.request(Url.Registration)
-        .del('/resource/sources/' + testSource.id)
-        .end((err, res) => {
-          done();
-        });
+      QueryUtil.removeResource(done, Url.Registration, '/sources', testSource.id);
     });
 
     // test cases
@@ -93,76 +77,31 @@ describe('Query', () => {
     });
 
     it('should contain the test sources', (done) => {
-      chai.request(Url.Query)
-        .get('/sources')
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.label === testSource.label)).to.be.true;
-          done();
-        });
+      QueryUtil.containTestResource(done, Url.Query, '/sources', testSource.label);
     });
 
     it('should return the desired source by device_id', (done) => {
-      chai.request(Url.Query)
-        .get('/sources')
-        .field('device_id', testSource.device_id)
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.device_id === testSource.device_id)).to.be.true;
-          done();
-        });
+      QueryUtil.getResourceByParameter(done, Url.Query, '/sources', 'device_id', testSource.device_id);
     });
 
     it('should return the desired source by label', (done) => {
-      chai.request(Url.Query)
-        .get('/sources')
-        .field('label', testSource.label)
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.label === testSource.label)).to.be.true;
-          done();
-        });
+      QueryUtil.getResourceByParameter(done, Url.Query, '/sources', 'label', testSource.label);
     });
 
     it('should return the desired source by description', (done) => {
-      chai.request(Url.Query)
-        .get('/sources')
-        .field('description', testSource.description)
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.description === testSource.description)).to.be.true;
-          done();
-        });
+      QueryUtil.getResourceByParameter(done, Url.Query, '/sources', 'description', testSource.description);
     });
 
     it('should return the desired source by format', (done) => {
-      chai.request(Url.Query)
-        .get('/sources')
-        .field('format', testSource.format)
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.format === testSource.format)).to.be.true;
-          done();
-        });
+      QueryUtil.getResourceByParameter(done, Url.Query, '/sources', 'format', testSource.format);
     });
 
     it('should get a single source by id', (done) => {
-      chai.request(Url.Query)
-        .get('/sources/' + testSource.id)
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body.label).to.equal(testSource.label);
-          done();
-        });
+      QueryUtil.getSingleResourceById(done, Url.Query, '/sources', testSource.id);
     });
 
     it('should return an error when the requested source id does not exist', (done) => {
-      chai.request(Url.Query)
-        .get('/sources/wrong id')
-        .end((err, res) => {
-          expect(res).to.have.status(404);
-          done();
-        });
+      QueryUtil.failGetNonExistentResource(done, Url.Query, '/sources');
     });
 
   });

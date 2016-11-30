@@ -26,27 +26,11 @@ describe('Query', () => {
 
     // hooks
     before((done) => {
-      // add test node
-      let body = {
-        'type': 'node',
-        'data': testNode
-      };
-
-      chai.request(Url.Registration)
-        .post('/resource')
-        .send(body)
-        .end((err, res) => {
-          done();
-        });
+      QueryUtil.addResource(done, Url.Registration, 'node', testNode);
     });
 
     after((done) => {
-      // remove test node
-      chai.request(Url.Registration)
-        .del('/resource/nodes/' + testNode.id)
-        .end((err, res) => {
-          done();
-        });
+      QueryUtil.removeResource(done, Url.Registration, '/nodes', testNode.id);
     });
 
     // test cases
@@ -80,32 +64,15 @@ describe('Query', () => {
     });
 
     it('should contain the test nodes', (done) => {
-      chai.request(Url.Query)
-        .get('/nodes')
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body.some((entry: any) => entry.label === testNode.label)).to.be.true;
-          done();
-        });
+      QueryUtil.containTestResource(done, Url.Query, '/nodes', testNode.label);
     });
 
     it('should get a single node by id', (done) => {
-      chai.request(Url.Query)
-        .get('/nodes/' + testNode.id)
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body.label).to.equal(testNode.label);
-          done();
-        });
+      QueryUtil.getSingleResourceById(done, Url.Query, '/nodes', testNode.id);
     });
 
     it('should return an error when the requested node id does not exist', (done) => {
-      chai.request(Url.Query)
-        .get('/nodes/wrong id')
-        .end((err, res) => {
-          expect(res).to.have.status(404);
-          done();
-        });
+      QueryUtil.failGetNonExistentResource(done, Url.Query, '/nodes');
     });
 
   });
