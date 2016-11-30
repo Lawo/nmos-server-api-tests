@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { Url } from './../url';
+import { Url } from './../util/url';
+import { QueryUtil } from './../util/queryUtil';
 
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
@@ -50,13 +51,7 @@ describe('Query', () => {
 
     // test cases
     it('should list all nodes on /nodes GET', (done) => {
-      chai.request(Url.Query)
-        .get('/nodes')
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res).to.be.json;
-          done();
-        });
+      QueryUtil.listAll(done, Url.Query, '/nodes');
     });
 
     it('should have all required properties', (done) => {
