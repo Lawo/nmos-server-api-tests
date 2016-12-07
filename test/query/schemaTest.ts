@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import { assert } from 'chai';
-import { should } from 'chai';
 
 import chai = require('chai');
 import ChaiJsonSchema = require('chai-json-schema');
 
 chai.use(ChaiJsonSchema);
+chai.should();
 
 let goodApple = {
   skin: 'thin',
@@ -47,6 +47,9 @@ describe('Schema', () => {
     // bdd style
     expect(goodApple).to.be.jsonSchema(fruitSchema);
     expect(badApple).to.not.be.jsonSchema(fruitSchema);
+
+    goodApple.should.be.jsonSchema(fruitSchema);
+    badApple.should.not.be.jsonSchema(fruitSchema);
 
     // tdd style
     assert.jsonSchema(goodApple, fruitSchema);
