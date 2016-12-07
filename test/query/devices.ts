@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { Url } from './../util/url';
 import { QueryUtil } from './../util/queryUtil';
 
