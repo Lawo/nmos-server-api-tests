@@ -32,6 +32,15 @@ export class QueryUtil {
       });
   }
 
+  public static addSubscription(done: MochaDone, url: string, testSubscription: Object) {
+    chai.request(url)
+    .post('/subscriptions')
+    .send(testSubscription)
+    .end((err, res) => {
+      done();
+    });
+  }
+
   // test cases
   public static listAll(done: MochaDone, url: string, resourceType: string) {
     chai.request(url)
