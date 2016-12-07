@@ -2,10 +2,6 @@ import { expect } from 'chai';
 import { Url } from './../util/url';
 import { QueryUtil } from './../util/queryUtil';
 
-import * as chai from 'chai';
-import chaiHttp = require('chai-http');
-chai.use(chaiHttp);
-
 describe('Query', () => {
   describe('Devices', () => {
 
@@ -37,7 +33,8 @@ describe('Query', () => {
       QueryUtil.listAll(done, Url.Query, '/devices');
     });
 
-    it.skip('should have all required properties', (done) => {
+    it('should validate against JSON-schema', (done) => {
+      QueryUtil.validateSchema(done, Url.Query, '/devices', './specification/schemas/device.json');
     });
 
     it('should contain the test devices', (done) => {

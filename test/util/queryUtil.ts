@@ -4,30 +4,32 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
+import loadJsonFile = require('load-json-file');
+
 export class QueryUtil {
   // hooks
   public static addResource(done: MochaDone, url: string, type: string, testResource: Object) {
-      // add test resource
-      let body = {
-        'type': type,
-        'data': testResource
-      };
+    // add test resource
+    let body = {
+      'type': type,
+      'data': testResource
+    };
 
-      chai.request(url)
-        .post('/resource')
-        .send(body)
-        .end((err, res) => {
-          done();
-        });
+    chai.request(url)
+      .post('/resource')
+      .send(body)
+      .end((err, res) => {
+        done();
+      });
   }
 
   public static removeResource(done: MochaDone, url: string, resourceType: string, id: string) {
-      // remove test resource
-      chai.request(url)
-        .del('/resource' + resourceType + '/' + id)
-        .end((err, res) => {
-          done();
-        });
+    // remove test resource
+    chai.request(url)
+      .del('/resource' + resourceType + '/' + id)
+      .end((err, res) => {
+        done();
+      });
   }
 
   // test cases
@@ -37,6 +39,21 @@ export class QueryUtil {
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res).to.be.json;
+        done();
+      });
+  }
+
+  public static validateSchema(done: MochaDone, url: string, resourceType: string, schemaFile: string) {
+    chai.request(url)
+      .get(resourceType)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        let schema = loadJsonFile.sync(schemaFile);
+
+        res.body.forEach((entry: any) => {
+          expect(entry).to.be.jsonSchema(schema);
+        });
+
         done();
       });
   }

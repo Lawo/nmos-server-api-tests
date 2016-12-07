@@ -2,10 +2,6 @@ import { expect } from 'chai';
 import { Url } from './../util/url';
 import { QueryUtil } from './../util/queryUtil';
 
-import * as chai from 'chai';
-import chaiHttp = require('chai-http');
-chai.use(chaiHttp);
-
 describe('Query', () => {
   describe('Senders', () => {
 
@@ -36,7 +32,8 @@ describe('Query', () => {
       QueryUtil.listAll(done, Url.Query, '/senders');
     });
 
-    it.skip('should have all required properties', (done) => {
+    it('should validate against JSON-schema', (done) => {
+      QueryUtil.validateSchema(done, Url.Query, '/senders', './specification/schemas/sender.json');
     });
 
     it('should contain the test senders', (done) => {

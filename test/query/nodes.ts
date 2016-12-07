@@ -2,10 +2,6 @@ import { expect } from 'chai';
 import { Url } from './../util/url';
 import { QueryUtil } from './../util/queryUtil';
 
-import * as chai from 'chai';
-import chaiHttp = require('chai-http');
-chai.use(chaiHttp);
-
 describe('Query', () => {
   describe('Nodes', () => {
 
@@ -38,29 +34,8 @@ describe('Query', () => {
       QueryUtil.listAll(done, Url.Query, '/nodes');
     });
 
-    it('should have all required properties', (done) => {
-      chai.request(Url.Query)
-        .get('/nodes')
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-
-          res.body.forEach((entry: any) => {
-            expect(entry).to.have.property('id');
-            expect(entry).to.have.property('version');
-            expect(entry).to.have.property('label');
-            expect(entry).to.have.property('href');
-            expect(entry).to.have.property('caps');
-            expect(entry).to.have.property('services');
-
-            expect(entry.id).to.be.a('string');
-            expect(entry.version).to.be.a('string');
-            expect(entry.label).to.be.a('string');
-            expect(entry.href).to.be.a('string');
-            expect(entry.caps).to.be.an('object');
-            expect(entry.services).to.be.an('array');
-          });
-          done();
-        });
+    it('should validate against JSON-schema', (done) => {
+      QueryUtil.validateSchema(done, Url.Query, '/nodes', './specification/schemas/node.json');
     });
 
     it('should contain the test nodes', (done) => {
