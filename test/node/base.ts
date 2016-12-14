@@ -34,7 +34,7 @@ describe('Node', () => {
     });
 
     it('POST should not be supported.', (done) => {
-      chai.request(Url.Query)
+      chai.request(Url.Node)
         .post('/')
         .end(function (err, res) {
           expect(res).to.have.status(405);
