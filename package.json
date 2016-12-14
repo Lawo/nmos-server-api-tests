@@ -8,7 +8,8 @@
     "clean": "rimraf dist/*",
     "pretest": "tsc",
     "test": "mocha --recursive dist/",
-    "test-xunit": "mocha --recursive -R mocha-jenkins-reporter --reporter-options junit_report_path=test-reports.xml dist/"
+    "test-xunit": "mocha --recursive -R mocha-jenkins-reporter --reporter-options junit_report_path=test-reports.xml dist/",
+    "tsc:w": "tsc -w"
   },
   "author": "ulrich.heiniger@lawo.com",
   "license": "ISC",
