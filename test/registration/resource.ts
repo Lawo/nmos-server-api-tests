@@ -26,7 +26,7 @@ describe('Registration', () => {
     describe('not registered', () => {
       // hooks
       afterEach((done) => {
-        RegistrationUtil.removeResource(done, Url.Registration, '/nodes', testNode.id);
+        RegistrationUtil.removeResource(done, Url.Registration, 'nodes', testNode.id);
       });
 
       // test cases
@@ -35,11 +35,11 @@ describe('Registration', () => {
       });
 
       it('should fail when trying to get non existent resource (for debug use only)', (done) => {
-        RegistrationUtil.getResource(done, Url.Registration, '/nodes', testNode.id, 404);
+        RegistrationUtil.getResource(done, Url.Registration, 'nodes', testNode.id, 404);
       });
 
       it('should fail when trying to delete a non existent resource', (done) => {
-        RegistrationUtil.deleteResource(done, Url.Registration, '/nodes', testNode.id, 404);
+        RegistrationUtil.deleteResource(done, Url.Registration, 'nodes', testNode.id, 404);
       });
 
     });
@@ -51,7 +51,7 @@ describe('Registration', () => {
       });
 
       afterEach((done) => {
-        RegistrationUtil.removeResource(done, Url.Registration, '/nodes', testNode.id);
+        RegistrationUtil.removeResource(done, Url.Registration, 'nodes', testNode.id);
       });
 
       // test cases
@@ -60,11 +60,11 @@ describe('Registration', () => {
       });
 
       it('should get a registered resource (for debug use only)', (done) => {
-        RegistrationUtil.getResource(done, Url.Registration, '/nodes', testNode.id, 200);
+        RegistrationUtil.getResource(done, Url.Registration, 'nodes', testNode.id, 200);
       });
 
       it('should delete a registered resource', (done) => {
-        RegistrationUtil.deleteResource(done, Url.Registration, '/nodes', testNode.id, 204);
+        RegistrationUtil.deleteResource(done, Url.Registration, 'nodes', testNode.id, 204);
       });
 
     });

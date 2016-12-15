@@ -27,7 +27,7 @@ export class RegistrationUtil {
   public static removeResource(done: MochaDone, url: string, resourceType: string, id: string) {
     // remove test resource
     chai.request(url)
-      .del('/resource' + resourceType + '/' + id)
+      .del(['/resource', resourceType, id].join('/'))
       .end((err, res) => {
         done();
       });
@@ -54,7 +54,7 @@ export class RegistrationUtil {
 
   public static getResource(done: MochaDone, url: string, resourceType: string, id: string, status: number) {
     chai.request(url)
-      .get('/resource' + resourceType + '/' + id)
+      .get(['/resource', resourceType, id].join('/'))
       .end((err, res) => {
         expect(res).to.have.status(status);
         done();
@@ -63,10 +63,12 @@ export class RegistrationUtil {
 
   public static deleteResource(done: MochaDone, url: string, resourceType: string, id: string, status: number) {
     chai.request(url)
-      .del('/resource' + resourceType + '/' + id)
+      .del(['/resource', resourceType, id].join('/'))
       .end((err, res) => {
         expect(res).to.have.status(status);
         done();
       });
   }
 }
+
+
