@@ -1,5 +1,5 @@
-import { Url } from './../util/url';
 import { Node } from './../util/node';
+import { Url } from './../util/url';
 
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');

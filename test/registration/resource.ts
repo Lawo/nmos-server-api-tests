@@ -1,6 +1,6 @@
-import { Url } from './../util/url';
-import { Registration } from './../util/registration';
 import { Hooks } from './../util/hooks';
+import { Registration } from './../util/registration';
+import { Url } from './../util/url';
 
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');

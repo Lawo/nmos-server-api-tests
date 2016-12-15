@@ -4,7 +4,7 @@
   "description": "Tests for the nmos-server REST-API",
   "main": "index.js",
   "scripts": {
-    "build": "tslint test/*.ts && tsc",
+    "build": "tslint test/**/*.ts && tsc",
     "clean": "rimraf dist/*",
     "pretest": "tsc",
     "test": "mocha --recursive dist/",

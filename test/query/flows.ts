@@ -1,6 +1,6 @@
-import { Url } from './../util/url';
 import { Hooks } from './../util/hooks';
 import { Query } from './../util/query';
+import { Url } from './../util/url';
 
 describe('Query', () => {
   describe('Flows', () => {

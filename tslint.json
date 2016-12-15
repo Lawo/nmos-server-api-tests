@@ -56,6 +56,13 @@
       "check-finally",
       "check-whitespace"
     ],
+    "ordered-imports": [
+      true, 
+      {
+        "import-sources-order": "lowercase-first", 
+        "named-imports-order": "lowercase-first"
+      }
+    ],
     "quotemark": [
       true,
       "single",
