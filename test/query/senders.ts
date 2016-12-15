@@ -1,5 +1,6 @@
 import { Url } from './../util/url';
-import { QueryUtil } from './../util/queryUtil';
+import { Hooks } from './../util/hooks';
+import { Query } from './../util/query';
 
 describe('Query', () => {
   describe('Senders', () => {
@@ -19,48 +20,48 @@ describe('Query', () => {
 
     // hooks
     before((done) => {
-      QueryUtil.addResource(done, Url.Registration, 'sender', testSender);
+      Hooks.addResource(done, Url.Registration, 'sender', testSender);
     });
 
     after((done) => {
-      QueryUtil.removeResource(done, Url.Registration, '/senders', testSender.id);
+      Hooks.removeResource(done, Url.Registration, 'senders', testSender.id);
     });
 
     // test cases
     it('should list all senders on /senders GET', (done) => {
-      QueryUtil.listAll(done, Url.Query, '/senders');
+      Query.listAll(done, Url.Query, 'senders');
     });
 
     it('should validate against JSON-schema', (done) => {
-      QueryUtil.validateSchema(done, Url.Query, '/senders', './specification/schemas/sender.json');
+      Query.validateSchema(done, Url.Query, 'senders', './specification/schemas/sender.json');
     });
 
     it('should contain the test senders', (done) => {
-      QueryUtil.containTestResource(done, Url.Query, '/senders', testSender.label);
+      Query.containTestResource(done, Url.Query, 'senders', testSender.label);
     });
 
     it('should return the desired sender by flow_id', (done) => {
-      QueryUtil.getResourceByParameter(done, Url.Query, '/senders', 'flow_id', testSender.flow_id);
+      Query.getResourceByParameter(done, Url.Query, 'senders', 'flow_id', testSender.flow_id);
     });
 
     it('should return the desired sender by label', (done) => {
-      QueryUtil.getResourceByParameter(done, Url.Query, '/senders', 'label', testSender.label);
+      Query.getResourceByParameter(done, Url.Query, 'senders', 'label', testSender.label);
     });
 
     it('should return the desired sender by description', (done) => {
-      QueryUtil.getResourceByParameter(done, Url.Query, '/senders', 'description', testSender.description);
+      Query.getResourceByParameter(done, Url.Query, 'senders', 'description', testSender.description);
     });
 
     it('should return the desired sender by transport', (done) => {
-      QueryUtil.getResourceByParameter(done, Url.Query, '/senders', 'transport', testSender.transport);
+      Query.getResourceByParameter(done, Url.Query, 'senders', 'transport', testSender.transport);
     });
 
     it('should get a single sender by id', (done) => {
-      QueryUtil.getSingleResourceById(done, Url.Query, '/senders', testSender.id);
+      Query.getSingleResourceById(done, Url.Query, 'senders', testSender.id);
     });
 
     it('should return an error when the requested sender id does not exist', (done) => {
-      QueryUtil.failGetNonExistentResource(done, Url.Query, '/senders');
+      Query.failGetNonExistentResource(done, Url.Query, 'senders');
     });
 
   });

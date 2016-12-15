@@ -4,13 +4,13 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
-export class NodeUtil {
+export class Node {
   // hooks
 
   // test cases
   public static expectEmptyResources(done: MochaDone, url: string, resourceType: string) {
     chai.request(url)
-      .get(resourceType)
+      .get('/' + resourceType)
       .end(function (err, res) {
         expect(res).to.have.status(200);
         expect(res).to.be.json;
@@ -21,7 +21,7 @@ export class NodeUtil {
 
   public static failGetNonExistentResource(done: MochaDone, url: string, resourceType: string) {
     chai.request(url)
-      .get(resourceType + '/nonexistent id')
+      .get('/' + resourceType + '/nonexistent id')
       .end((err, res) => {
         expect(res).to.have.status(404);
         done();

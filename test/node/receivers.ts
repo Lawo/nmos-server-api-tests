@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 import { Url } from './../util/url';
-import { NodeUtil } from './../util/nodeUtil';
+import { Node } from './../util/node';
 
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
@@ -11,11 +11,11 @@ describe('Node', () => {
   describe('Receivers', () => {
 
     it('should be empty', (done) => {
-      NodeUtil.expectEmptyResources(done, Url.Node, '/receivers');
+      Node.expectEmptyResources(done, Url.Node, 'receivers');
     });
 
     it('should return an error when the requested receiver id does not exist', (done) => {
-      NodeUtil.failGetNonExistentResource(done, Url.Node, '/receivers');
+      Node.failGetNonExistentResource(done, Url.Node, 'receivers');
     });
 
     it('should return an error when trying to request a change to a receivers subscription', (done) => {

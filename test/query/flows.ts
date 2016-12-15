@@ -1,5 +1,6 @@
 import { Url } from './../util/url';
-import { QueryUtil } from './../util/queryUtil';
+import { Hooks } from './../util/hooks';
+import { Query } from './../util/query';
 
 describe('Query', () => {
   describe('Flows', () => {
@@ -17,48 +18,48 @@ describe('Query', () => {
 
     // hooks
     before((done) => {
-      QueryUtil.addResource(done, Url.Registration, 'flow', testFlow);
+      Hooks.addResource(done, Url.Registration, 'flow', testFlow);
     });
 
     after((done) => {
-      QueryUtil.removeResource(done, Url.Registration, '/flows', testFlow.id);
+      Hooks.removeResource(done, Url.Registration, 'flows', testFlow.id);
     });
 
     // test cases
     it('should list all flows on /flows GET', (done) => {
-      QueryUtil.listAll(done, Url.Query, '/flows');
+      Query.listAll(done, Url.Query, 'flows');
     });
 
     it('should validate against JSON-schema', (done) => {
-      QueryUtil.validateSchema(done, Url.Query, '/flows', './specification/schemas/flow.json');
+      Query.validateSchema(done, Url.Query, 'flows', './specification/schemas/flow.json');
     });
 
     it('should contain the test flows', (done) => {
-      QueryUtil.containTestResource(done, Url.Query, '/flows', testFlow.label);
+      Query.containTestResource(done, Url.Query, 'flows', testFlow.label);
     });
 
     it('should return the desired flow by source_id', (done) => {
-      QueryUtil.getResourceByParameter(done, Url.Query, '/flows', 'source_id', testFlow.source_id);
+      Query.getResourceByParameter(done, Url.Query, 'flows', 'source_id', testFlow.source_id);
     });
 
     it('should return the desired flow by label', (done) => {
-      QueryUtil.getResourceByParameter(done, Url.Query, '/flows', 'label', testFlow.label);
+      Query.getResourceByParameter(done, Url.Query, 'flows', 'label', testFlow.label);
     });
 
     it('should return the desired flow by description', (done) => {
-      QueryUtil.getResourceByParameter(done, Url.Query, '/flows', 'description', testFlow.description);
+      Query.getResourceByParameter(done, Url.Query, 'flows', 'description', testFlow.description);
     });
 
     it('should return the desired flow by format', (done) => {
-      QueryUtil.getResourceByParameter(done, Url.Query, '/flows', 'format', testFlow.format);
+      Query.getResourceByParameter(done, Url.Query, 'flows', 'format', testFlow.format);
     });
 
     it('should get a single flow by id', (done) => {
-      QueryUtil.getSingleResourceById(done, Url.Query, '/flows', testFlow.id);
+      Query.getSingleResourceById(done, Url.Query, 'flows', testFlow.id);
     });
 
     it('should return an error when the requested flow id does not exist', (done) => {
-      QueryUtil.failGetNonExistentResource(done, Url.Query, '/flows');
+      Query.failGetNonExistentResource(done, Url.Query, 'flows');
     });
 
   });

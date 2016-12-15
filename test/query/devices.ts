@@ -1,5 +1,6 @@
 import { Url } from './../util/url';
-import { QueryUtil } from './../util/queryUtil';
+import { Hooks } from './../util/hooks';
+import { Query } from './../util/query';
 
 describe('Query', () => {
   describe('Devices', () => {
@@ -20,40 +21,40 @@ describe('Query', () => {
 
     // hooks
     before((done) => {
-      QueryUtil.addResource(done, Url.Registration, 'device', testDevice);
+      Hooks.addResource(done, Url.Registration, 'device', testDevice);
     });
 
     after((done) => {
-      QueryUtil.removeResource(done, Url.Registration, '/devices', testDevice.id);
+      Hooks.removeResource(done, Url.Registration, 'devices', testDevice.id);
     });
 
     // test cases
     it('should list all devices on /devices GET', (done) => {
-      QueryUtil.listAll(done, Url.Query, '/devices');
+      Query.listAll(done, Url.Query, 'devices');
     });
 
     it('should validate against JSON-schema', (done) => {
-      QueryUtil.validateSchema(done, Url.Query, '/devices', './specification/schemas/device.json');
+      Query.validateSchema(done, Url.Query, 'devices', './specification/schemas/device.json');
     });
 
     it('should contain the test devices', (done) => {
-      QueryUtil.containTestResource(done, Url.Query, '/devices', testDevice.label);
+      Query.containTestResource(done, Url.Query, 'devices', testDevice.label);
     });
 
     it('should return the desired device by node_id', (done) => {
-      QueryUtil.getResourceByParameter(done, Url.Query, '/devices', 'node_id', testDevice.node_id);
+      Query.getResourceByParameter(done, Url.Query, 'devices', 'node_id', testDevice.node_id);
     });
 
     it('should return the desired device by label', (done) => {
-      QueryUtil.getResourceByParameter(done, Url.Query, '/devices', 'label', testDevice.label);
+      Query.getResourceByParameter(done, Url.Query, 'devices', 'label', testDevice.label);
     });
 
     it('should get a single device by id', (done) => {
-      QueryUtil.getSingleResourceById(done, Url.Query, '/devices', testDevice.id);
+      Query.getSingleResourceById(done, Url.Query, 'devices', testDevice.id);
     });
 
     it('should return an error when the requested device id does not exist', (done) => {
-      QueryUtil.failGetNonExistentResource(done, Url.Query, '/devices');
+      Query.failGetNonExistentResource(done, Url.Query, 'devices');
     });
 
   });

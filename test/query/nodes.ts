@@ -1,5 +1,6 @@
 import { Url } from './../util/url';
-import { QueryUtil } from './../util/queryUtil';
+import { Hooks } from './../util/hooks';
+import { Query } from './../util/query';
 
 describe('Query', () => {
   describe('Nodes', () => {
@@ -21,32 +22,32 @@ describe('Query', () => {
 
     // hooks
     before((done) => {
-      QueryUtil.addResource(done, Url.Registration, 'node', testNode);
+      Hooks.addResource(done, Url.Registration, 'node', testNode);
     });
 
     after((done) => {
-      QueryUtil.removeResource(done, Url.Registration, '/nodes', testNode.id);
+      Hooks.removeResource(done, Url.Registration, 'nodes', testNode.id);
     });
 
     // test cases
     it('should list all nodes on /nodes GET', (done) => {
-      QueryUtil.listAll(done, Url.Query, '/nodes');
+      Query.listAll(done, Url.Query, 'nodes');
     });
 
     it('should validate against JSON-schema', (done) => {
-      QueryUtil.validateSchema(done, Url.Query, '/nodes', './specification/schemas/node.json');
+      Query.validateSchema(done, Url.Query, 'nodes', './specification/schemas/node.json');
     });
 
     it('should contain the test nodes', (done) => {
-      QueryUtil.containTestResource(done, Url.Query, '/nodes', testNode.label);
+      Query.containTestResource(done, Url.Query, 'nodes', testNode.label);
     });
 
     it('should get a single node by id', (done) => {
-      QueryUtil.getSingleResourceById(done, Url.Query, '/nodes', testNode.id);
+      Query.getSingleResourceById(done, Url.Query, 'nodes', testNode.id);
     });
 
     it('should return an error when the requested node id does not exist', (done) => {
-      QueryUtil.failGetNonExistentResource(done, Url.Query, '/nodes');
+      Query.failGetNonExistentResource(done, Url.Query, 'nodes');
     });
 
   });

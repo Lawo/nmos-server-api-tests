@@ -1,5 +1,5 @@
 import { Url } from './../util/url';
-import { NodeUtil } from './../util/nodeUtil';
+import { Node } from './../util/node';
 
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
@@ -9,11 +9,11 @@ describe('Node', () => {
   describe('Flows', () => {
 
     it('should be empty', (done) => {
-      NodeUtil.expectEmptyResources(done, Url.Node, '/flows');
+      Node.expectEmptyResources(done, Url.Node, 'flows');
     });
 
     it('should return an error when the requested flow id does not exist', (done) => {
-      NodeUtil.failGetNonExistentResource(done, Url.Node, '/flows');
+      Node.failGetNonExistentResource(done, Url.Node, 'flows');
     });
 
   });

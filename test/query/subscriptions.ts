@@ -1,5 +1,6 @@
 import { Url } from './../util/url';
-import { QueryUtil } from './../util/queryUtil';
+import { Hooks } from './../util/hooks';
+import { Query } from './../util/query';
 
 describe('Query', () => {
   describe('Subscriptions', () => {
@@ -15,12 +16,12 @@ describe('Query', () => {
 
     // hooks
     before((done) => {
-      QueryUtil.addSubscription(done, Url.Query, testSubscription);
+      Hooks.addSubscription(done, Url.Query, testSubscription);
     });
 
     // test cases
     it('should list all subscriptions on /subscriptions GET', (done) => {
-      QueryUtil.listAll(done, Url.Query, '/subscriptions');
+      Query.listAll(done, Url.Query, 'subscriptions');
     });
   });
 });

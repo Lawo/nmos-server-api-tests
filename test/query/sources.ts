@@ -1,5 +1,6 @@
 import { Url } from './../util/url';
-import { QueryUtil } from './../util/queryUtil';
+import { Hooks } from './../util/hooks';
+import { Query } from './../util/query';
 
 describe('Query', () => {
   describe('Sources', () => {
@@ -28,48 +29,48 @@ describe('Query', () => {
 
     // hooks
     before((done) => {
-      QueryUtil.addResource(done, Url.Registration, 'source', testSource);
+      Hooks.addResource(done, Url.Registration, 'source', testSource);
     });
 
     after((done) => {
-      QueryUtil.removeResource(done, Url.Registration, '/sources', testSource.id);
+      Hooks.removeResource(done, Url.Registration, 'sources', testSource.id);
     });
 
     // test cases
     it('should list all sources on /sources GET', (done) => {
-      QueryUtil.listAll(done, Url.Query, '/sources');
+      Query.listAll(done, Url.Query, 'sources');
     });
 
     it('should validate against JSON-schema', (done) => {
-      QueryUtil.validateSchema(done, Url.Query, '/sources', './specification/schemas/source.json');
+      Query.validateSchema(done, Url.Query, 'sources', './specification/schemas/source.json');
     });
 
     it('should contain the test sources', (done) => {
-      QueryUtil.containTestResource(done, Url.Query, '/sources', testSource.label);
+      Query.containTestResource(done, Url.Query, 'sources', testSource.label);
     });
 
     it('should return the desired source by device_id', (done) => {
-      QueryUtil.getResourceByParameter(done, Url.Query, '/sources', 'device_id', testSource.device_id);
+      Query.getResourceByParameter(done, Url.Query, 'sources', 'device_id', testSource.device_id);
     });
 
     it('should return the desired source by label', (done) => {
-      QueryUtil.getResourceByParameter(done, Url.Query, '/sources', 'label', testSource.label);
+      Query.getResourceByParameter(done, Url.Query, 'sources', 'label', testSource.label);
     });
 
     it('should return the desired source by description', (done) => {
-      QueryUtil.getResourceByParameter(done, Url.Query, '/sources', 'description', testSource.description);
+      Query.getResourceByParameter(done, Url.Query, 'sources', 'description', testSource.description);
     });
 
     it('should return the desired source by format', (done) => {
-      QueryUtil.getResourceByParameter(done, Url.Query, '/sources', 'format', testSource.format);
+      Query.getResourceByParameter(done, Url.Query, 'sources', 'format', testSource.format);
     });
 
     it('should get a single source by id', (done) => {
-      QueryUtil.getSingleResourceById(done, Url.Query, '/sources', testSource.id);
+      Query.getSingleResourceById(done, Url.Query, 'sources', testSource.id);
     });
 
     it('should return an error when the requested source id does not exist', (done) => {
-      QueryUtil.failGetNonExistentResource(done, Url.Query, '/sources');
+      Query.failGetNonExistentResource(done, Url.Query, 'sources');
     });
 
   });

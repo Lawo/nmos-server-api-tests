@@ -1,5 +1,6 @@
 import { Url } from './../util/url';
-import { RegistrationUtil } from './../util/registrationUtil';
+import { Registration } from './../util/registration';
+import { Hooks } from './../util/hooks';
 
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
@@ -26,20 +27,20 @@ describe('Registration', () => {
     describe('not registered', () => {
       // hooks
       afterEach((done) => {
-        RegistrationUtil.removeResource(done, Url.Registration, 'nodes', testNode.id);
+        Hooks.removeResource(done, Url.Registration, 'nodes', testNode.id);
       });
 
       // test cases
       it('should create a registered resource', (done) => {
-        RegistrationUtil.createOrUpdateResource(done, Url.Registration, 'node', testNode, './specification/schemas/node.json', 201);
+        Registration.createOrUpdateResource(done, Url.Registration, 'node', testNode, './specification/schemas/node.json', 201);
       });
 
       it('should fail when trying to get non existent resource (for debug use only)', (done) => {
-        RegistrationUtil.getResource(done, Url.Registration, 'nodes', testNode.id, 404);
+        Registration.getResource(done, Url.Registration, 'nodes', testNode.id, 404);
       });
 
       it('should fail when trying to delete a non existent resource', (done) => {
-        RegistrationUtil.deleteResource(done, Url.Registration, 'nodes', testNode.id, 404);
+        Registration.deleteResource(done, Url.Registration, 'nodes', testNode.id, 404);
       });
 
     });
@@ -47,24 +48,24 @@ describe('Registration', () => {
     describe('already registered', () => {
       // hooks
       beforeEach((done) => {
-        RegistrationUtil.addResource(done, Url.Registration, 'node', testNode);
+        Hooks.addResource(done, Url.Registration, 'node', testNode);
       });
 
       afterEach((done) => {
-        RegistrationUtil.removeResource(done, Url.Registration, 'nodes', testNode.id);
+        Hooks.removeResource(done, Url.Registration, 'nodes', testNode.id);
       });
 
       // test cases
       it('should update a registered resource', (done) => {
-        RegistrationUtil.createOrUpdateResource(done, Url.Registration, 'node', testNode, './specification/schemas/node.json', 200);
+        Registration.createOrUpdateResource(done, Url.Registration, 'node', testNode, './specification/schemas/node.json', 200);
       });
 
       it('should get a registered resource (for debug use only)', (done) => {
-        RegistrationUtil.getResource(done, Url.Registration, 'nodes', testNode.id, 200);
+        Registration.getResource(done, Url.Registration, 'nodes', testNode.id, 200);
       });
 
       it('should delete a registered resource', (done) => {
-        RegistrationUtil.deleteResource(done, Url.Registration, 'nodes', testNode.id, 204);
+        Registration.deleteResource(done, Url.Registration, 'nodes', testNode.id, 204);
       });
 
     });
