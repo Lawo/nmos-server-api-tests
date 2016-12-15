@@ -43,6 +43,33 @@ export class Registration {
         done();
       });
   }
+
+  public static getNodeHealth(done: MochaDone, url: string, id: string, status: number) {
+    chai.request(url)
+      .get('/health/nodes/' + id)
+      .end(function (err, res) {
+        expect(res).to.have.status(status);
+
+        if (status === 200) {
+          expect(res.body).to.have.property('health');
+        }
+
+        done();
+      });
+  }
+
+  public static updateNodeHealth(done: MochaDone, url: string, id: string, status: number, testHealth: any) {
+    chai.request(url)
+      .post('/health/nodes/' + id)
+      .send(testHealth)
+      .end(function (err, res) {
+        expect(res).to.have.status(status);
+
+        if (status === 200) {
+          expect(res.body).to.have.property('health', testHealth.health);
+        }
+
+        done();
+      });
+  }
 }
-
-
