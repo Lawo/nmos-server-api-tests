@@ -49,8 +49,8 @@ describe('Registration', () => {
     resources.forEach(resource => {
 
       describe(resource.type, () => {
-        const testResource = loadJsonFile.sync(resource.resourceFile);
-        const schema = loadJsonFile.sync(resource.schemaFile);
+        let testResource = loadJsonFile.sync(resource.resourceFile);
+        let schema = loadJsonFile.sync(resource.schemaFile);
 
         describe('not registered', () => {
           // hooks
