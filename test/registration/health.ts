@@ -2,27 +2,12 @@ import { Hooks } from './../util/hooks';
 import { Registration } from './../util/registration';
 import { Url } from './../util/url';
 
-import * as chai from 'chai';
-import chaiHttp = require('chai-http');
-chai.use(chaiHttp);
+import loadJsonFile = require('load-json-file');
 
 describe('Registration', () => {
   describe('Health', () => {
 
-    let testNode = {
-      'version': '1441973902:879053935',
-      'hostname': 'TestNode1',
-      'label': 'TestNode1',
-      'href': 'http://172.29.80.65:12345/',
-      'services': [
-        {
-          'href': 'http://172.29.80.65:12345/x-manufacturer/pipelinemanager/',
-          'type': 'urn:x-manufacturer:service:pipelinemanager'
-        }
-      ],
-      'caps': {},
-      'id': '3b8be755-08ff-452b-b217-c9151eb21193'
-    };
+    let testNode = loadJsonFile.sync('./test/resources/node.json');
 
     let testHealth = {
       'health': '1441974486'
