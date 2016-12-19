@@ -4,11 +4,9 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
-import loadJsonFile = require('load-json-file');
-
 export class Registration {
   // test cases
-  public static createOrUpdateResource(done: MochaDone, url: string, type: string, testResource: any, schemaFile: string, status: number) {
+  public static createOrUpdateResource(done: MochaDone, url: string, type: string, testResource: any, schema: any, status: number) {
     let body = {
       'type': type,
       'data': testResource
@@ -20,7 +18,6 @@ export class Registration {
       .end((err, res) => {
         expect(res).to.have.status(status);
         expect((<any>res).headers).property('location');
-        let schema = loadJsonFile.sync(schemaFile);
         expect(res.body).to.be.jsonSchema(schema);
         done();
       });

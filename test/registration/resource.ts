@@ -5,50 +5,52 @@ import { Url } from './../util/url';
 import loadJsonFile = require('load-json-file');
 
 describe('Registration', () => {
-  let resources = [
-    {
-      type: 'device',
-      resourceType: 'devices',
-      resourceFile: './test/resources/device.json',
-      schemaFile: './specification/schemas/device.json'
-    },
-    {
-      type: 'flow',
-      resourceType: 'flows',
-      resourceFile: './test/resources/flow.json',
-      schemaFile: './specification/schemas/flow.json'
-    },
-    {
-      type: 'node',
-      resourceType: 'nodes',
-      resourceFile: './test/resources/node.json',
-      schemaFile: './specification/schemas/node.json'
-    },
-    {
-      type: 'receiver',
-      resourceType: 'receivers',
-      resourceFile: './test/resources/receiver.json',
-      schemaFile: './specification/schemas/receiver.json'
-    },
-    {
-      type: 'sender',
-      resourceType: 'senders',
-      resourceFile: './test/resources/sender.json',
-      schemaFile: './specification/schemas/sender.json'
-    },
-    {
-      type: 'source',
-      resourceType: 'sources',
-      resourceFile: './test/resources/source.json',
-      schemaFile: './specification/schemas/source.json'
-    }
-  ];
-
   describe('Resource', () => {
+
+    let resources = [
+      {
+        type: 'device',
+        resourceType: 'devices',
+        resourceFile: './test/resources/device.json',
+        schemaFile: './specification/schemas/device.json'
+      },
+      {
+        type: 'flow',
+        resourceType: 'flows',
+        resourceFile: './test/resources/flow.json',
+        schemaFile: './specification/schemas/flow.json'
+      },
+      {
+        type: 'node',
+        resourceType: 'nodes',
+        resourceFile: './test/resources/node.json',
+        schemaFile: './specification/schemas/node.json'
+      },
+      {
+        type: 'receiver',
+        resourceType: 'receivers',
+        resourceFile: './test/resources/receiver.json',
+        schemaFile: './specification/schemas/receiver.json'
+      },
+      {
+        type: 'sender',
+        resourceType: 'senders',
+        resourceFile: './test/resources/sender.json',
+        schemaFile: './specification/schemas/sender.json'
+      },
+      {
+        type: 'source',
+        resourceType: 'sources',
+        resourceFile: './test/resources/source.json',
+        schemaFile: './specification/schemas/source.json'
+      }
+    ];
+
     resources.forEach(resource => {
 
       describe(resource.type, () => {
         const testResource = loadJsonFile.sync(resource.resourceFile);
+        const schema = loadJsonFile.sync(resource.schemaFile);
 
         describe('not registered', () => {
           // hooks
@@ -58,7 +60,7 @@ describe('Registration', () => {
 
           // test cases
           it('should create a registered resource', (done) => {
-            Registration.createOrUpdateResource(done, Url.Registration, resource.type, testResource, resource.schemaFile, 201);
+            Registration.createOrUpdateResource(done, Url.Registration, resource.type, testResource, schema, 201);
           });
 
           it('should fail when trying to get non existent resource (for debug use only)', (done) => {
@@ -83,7 +85,7 @@ describe('Registration', () => {
 
           // test cases
           it('should update a registered resource', (done) => {
-            Registration.createOrUpdateResource(done, Url.Registration, resource.type, testResource, resource.schemaFile, 200);
+            Registration.createOrUpdateResource(done, Url.Registration, resource.type, testResource, schema, 200);
           });
 
           it('should get a registered resource (for debug use only)', (done) => {
