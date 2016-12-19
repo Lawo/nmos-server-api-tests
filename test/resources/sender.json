@@ -1,0 +1,11 @@
+{
+  "description": "Camera 1",
+  "label": "Camera 1",
+  "manifest_href": "http://172.29.80.25:12345/x-nmos/node/v1.0/self/pipelinemanager/run/pipeline/1/pipel/ipp_rtptx2701/misc/sdp/stream.sdp",
+  "version": "1441724086:828491206",
+  "flow_id": "75bfddce-7142-4368-bb4a-8a82c837c6df",
+  "id": "4002d6b5-5775-4975-9859-5b330fcea288",
+  "transport": "urn:x-nmos:transport:rtp.mcast",
+  "device_id": "3a98e804-9871-4699-ba31-d608309d8933",
+  "tags": {}
+}

@@ -20,7 +20,7 @@ export class Registration {
       .end((err, res) => {
         expect(res).to.have.status(status);
         expect((<any>res).headers).property('location');
-        let schema = loadJsonFile.sync('./specification/schemas/node.json');
+        let schema = loadJsonFile.sync(schemaFile);
         expect(res.body).to.be.jsonSchema(schema);
         done();
       });
