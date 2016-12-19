@@ -2,23 +2,12 @@ import { Hooks } from './../util/hooks';
 import { Query } from './../util/query';
 import { Url } from './../util/url';
 
+import loadJsonFile = require('load-json-file');
+
 describe('Query', () => {
   describe('Nodes', () => {
 
-    let testNode = {
-      'version': '1441973902:879053935',
-      'hostname': 'TestNode1',
-      'label': 'TestNode1',
-      'href': 'http://172.29.80.65:12345/',
-      'services': [
-        {
-          'href': 'http://172.29.80.65:12345/x-manufacturer/pipelinemanager/',
-          'type': 'urn:x-manufacturer:service:pipelinemanager'
-        }
-      ],
-      'caps': {},
-      'id': '3b8be755-08ff-452b-b217-c9151eb21193'
-    };
+    let testNode = loadJsonFile.sync('./test/resources/node.json');
 
     // hooks
     before((done) => {

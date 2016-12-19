@@ -2,19 +2,12 @@ import { Hooks } from './../util/hooks';
 import { Query } from './../util/query';
 import { Url } from './../util/url';
 
+import loadJsonFile = require('load-json-file');
+
 describe('Query', () => {
   describe('Flows', () => {
 
-    let testFlow = {
-      'description': 'Off-air proxy',
-      'format': 'urn:x-nmos:format:video',
-      'tags': {},
-      'label': 'Off-air proxy',
-      'version': '1441724130:194944510',
-      'parents': <any>[],
-      'source_id': 'c7b1c809-84d4-427d-b6bb-c8397c66ce2b',
-      'id': '0c1f03d7-7e94-4b21-94d1-3ffbee8a0606'
-    };
+    let testFlow = loadJsonFile.sync('./test/resources/flow.json');
 
     // hooks
     before((done) => {

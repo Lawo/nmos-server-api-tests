@@ -2,30 +2,12 @@ import { Hooks } from './../util/hooks';
 import { Query } from './../util/query';
 import { Url } from './../util/url';
 
+import loadJsonFile = require('load-json-file');
+
 describe('Query', () => {
   describe('Sources', () => {
 
-    let testSource = {
-          'description': 'Camera 1',
-          'format': 'urn:x-nmos:format:video',
-          'tags': {
-            'SourceDeviceType': [
-              'UHD Camera'
-            ],
-            'host': [
-              'host1'
-            ],
-            'location': [
-              'Location 1'
-            ]
-          },
-          'caps': {},
-          'version': '1441724551:288670563',
-          'parents': <any>[],
-          'label': 'TestSource1',
-          'id': '042a4126-0208-443d-bda6-833ffc27ed51',
-          'device_id': '21a28338-fb2e-4df5-9b55-d58e6124bc9f'
-    };
+    let testSource = loadJsonFile.sync('./test/resources/source.json');
 
     // hooks
     before((done) => {
