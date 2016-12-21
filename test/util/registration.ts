@@ -3,6 +3,8 @@ import { expect } from 'chai';
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 chai.use(chaiHttp);
+import ChaiJsonSchema = require('chai-json-schema');
+chai.use(ChaiJsonSchema);
 
 export class Registration {
   // test cases
