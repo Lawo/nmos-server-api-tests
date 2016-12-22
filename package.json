@@ -19,13 +19,15 @@
     "@types/es6-promise": "0.0.32",
     "@types/load-json-file": "^2.0.5",
     "@types/mocha": "^2.2.33",
+    "@types/ws": "0.0.37",
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
     "chai-json-schema": "^1.4.0",
     "load-json-file": "^2.0.0",
     "mocha": "^3.1.2",
     "mocha-jenkins-reporter": "^0.3.1",
-    "typescript": "^2.0.10"
+    "typescript": "^2.0.10",
+    "ws": "^1.1.1"
   },
   "devDependencies": {
     "rimraf": "^2.5.4",
