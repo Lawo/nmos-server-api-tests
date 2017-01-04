@@ -10,8 +10,30 @@ chai.use(chaiHttp);
 import loadJsonFile = require('load-json-file');
 import WebSocket = require('ws');
 
+///////////////////////////////////////////////////////////////////////////////
+
+function delay(ms: number) {
+  return new Promise<void>(function (resolve) {
+    setTimeout(resolve, ms);
+  });
+}
+
+async function asyncAwait(done: MochaDone) {
+  console.log('Knock, knock!');
+
+  await delay(1000);
+  console.log("Who's there?");
+
+  await delay(1000);
+  console.log('async/await!');
+
+  done();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 describe('Query', () => {
-  describe('Subscriptions', () => {
+  describe.only('Subscriptions', () => {
 
     let testSubscription = {
       'max_update_rate_ms': 100,
@@ -34,8 +56,28 @@ describe('Query', () => {
     });
 
     // test cases
+    it('should work with async and await', (done) => {
+      asyncAwait(done);
+    });
+
     it('should list all subscriptions on /subscriptions GET', (done) => {
       Query.listAll(done, Url.Query, 'subscriptions');
+    });
+
+    it('should get subscription by Id', (done) => {
+      chai.request(Url.Query)
+        .get('/subscriptions')
+        .end((err, res) => {
+
+          let subscription = res.body.find((item: any) => item.params.label === testSubscription.params.label);
+
+          chai.request(Url.Query)
+            .get('/subscriptions/' + subscription.id)
+            .end((err2, res2) => {
+              expect(res2).to.have.status(200);
+              done();
+            });
+        });
     });
 
     it('should get subscription notification via websocket when adding a resource', (done) => {
