@@ -33,7 +33,7 @@ async function asyncAwait(done: MochaDone) {
 ///////////////////////////////////////////////////////////////////////////////
 
 describe('Query', () => {
-  describe.only('Subscriptions', () => {
+  describe.skip('Subscriptions', () => {
 
     let testSubscription = {
       'max_update_rate_ms': 100,
