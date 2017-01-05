@@ -25,7 +25,8 @@
       "sourceMaps": true,
       "outFiles": [
         "${workspaceRoot}/dist/**/*.js"
-      ]
+      ],
+      "envFile": "${workspaceRoot}/.vscode/hostAndPorts.env"
     }
   ]
 }
