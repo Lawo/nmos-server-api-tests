@@ -23,7 +23,9 @@
         "--nolazy"
       ],
       "sourceMaps": true,
-      "outDir": "${workspaceRoot}/dist"
+      "outFiles": [
+        "${workspaceRoot}/dist/**/*.js"
+      ]
     }
   ]
 }
