@@ -26,7 +26,7 @@
       "outFiles": [
         "${workspaceRoot}/dist/**/*.js"
       ],
-      "envFile": "${workspaceRoot}/.vscode/hostAndPorts.env"
+      "envFile": "${workspaceRoot}/.vscode/launch.env"
     }
   ]
 }
