@@ -35,7 +35,7 @@ The test results will be displayed in the console.
 npm run test --host=192.168.1.76 --node_port=12345 --query_port=8870 --registration_port=8235
 </pre>
 
-### test
+### test-xunit
 The test results will be written into the file **test-reports.xml** in **xUnit-format**.
 This comes in handy when integrating of the tests into a CI-System. 
 <pre>
