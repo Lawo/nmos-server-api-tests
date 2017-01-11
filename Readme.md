@@ -22,6 +22,7 @@ It is planned to use the git submodule mechanism in the future to avoid the copi
     <pre>
     npm install
     </pre>
+* If not running already, start the NMOS-server to be tested.
 
 Now everything is ready to run the tests.
 
@@ -37,7 +38,7 @@ npm run test --host=192.168.1.76 --node_port=12345 --query_port=8870 --registrat
 
 ### test-xunit
 The test results will be written into the file **test-reports.xml** in **xUnit-format**.
-This comes in handy when integrating of the tests into a CI-System. 
+This comes in handy when integrating the tests into a CI-System. 
 <pre>
 npm run test-xunit --host=192.168.1.76 --node_port=12345 --query_port=8870 --registration_port=8235
 </pre>
@@ -46,6 +47,7 @@ npm run test-xunit --host=192.168.1.76 --node_port=12345 --query_port=8870 --reg
 Host and ports may be specified from the command line when running the tests. 
 
 #### Host
+The ip-address of the NMOS-server to be tested.
 <pre>
 --host=192.168.1.76
 </pre>
@@ -61,4 +63,16 @@ For each of the Node-, Query- and Registration-API a separate port may be specif
 </pre>
 
 If no port is specified the default value **15631** is used.
+
+## Debug Tests
+
+For users of [Visual Studio Code](https://code.visualstudio.com/) everything is prepared to debug the tests.
+
+* Open project in Visual Studio Code
+* Install workspace recommended extensions. Hit `F1`, type `work` and select **Extensions: Show Workspace Recommended Extensions**
+* Specify Host and Port in the file *.vscode/launch.env*
+* Run build task. Hit `Ctrl`, `Shift` and `B`
+* Set breakpoints in any *ts-files* using `F9`. 
+* Debug the tests. Hit `F5` to start. 
+
 
