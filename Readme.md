@@ -1,6 +1,7 @@
 # Readme
 
-This is the automated test project to test the nmos-server REST-API.
+The nmos-server-api-tests project provides automated tests for the Query-, Node- and Registration-APIs of an NMOS-server.
+The project is written in Typescript. It uses the Mocha Javascript test framework and the Chai Assertion Library.
 
 ## Installation
 
