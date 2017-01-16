@@ -9,10 +9,6 @@ describe('Registration', () => {
 
     let testNode = loadJsonFile.sync('./test/resources/node.json');
 
-    let testHealth = {
-      'health': '1441974486'
-    };
-
     describe('node is existing', () => {
 
       // hooks
@@ -30,7 +26,7 @@ describe('Registration', () => {
       });
 
       it('should update node health', (done) => {
-        Registration.updateNodeHealth(done, Url.Registration, testNode.id, 200, testHealth);
+        Registration.updateNodeHealth(done, Url.Registration, testNode.id, 200);
       });
 
     });
@@ -43,7 +39,7 @@ describe('Registration', () => {
       });
 
       it('should fail to update a missing node\'s health', (done) => {
-        Registration.updateNodeHealth(done, Url.Registration, testNode.id, 404, testHealth);
+        Registration.updateNodeHealth(done, Url.Registration, testNode.id, 404);
       });
 
     });

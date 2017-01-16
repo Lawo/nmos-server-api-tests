@@ -57,15 +57,14 @@ export class Registration {
       });
   }
 
-  public static updateNodeHealth(done: MochaDone, url: string, id: string, status: number, testHealth: any) {
+  public static updateNodeHealth(done: MochaDone, url: string, id: string, status: number) {
     chai.request(url)
       .post('/health/nodes/' + id)
-      .send(testHealth)
       .end(function (err, res) {
         expect(res).to.have.status(status);
 
         if (status === 200) {
-          expect(res.body).to.have.property('health', testHealth.health);
+          expect(res.body).to.have.property('health');
         }
 
         done();
