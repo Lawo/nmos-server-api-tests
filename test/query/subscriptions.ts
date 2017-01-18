@@ -23,6 +23,7 @@ describe('Query', () => {
     };
 
     let testId: string = undefined;
+    let invalidId = '00000000-0000-1000-8000-000000000000';
 
     let testNode = loadJsonFile.sync('./test/resources/node.json');
 
@@ -64,30 +65,21 @@ describe('Query', () => {
       expect(res.body.id).to.equal(testId);
     }
 
-    async function getSubscriptionAsync() {
-      let res = await chai.request(Url.Query).get('/subscriptions/' + testId);
-
-      expect(res).to.have.status(200);
-    }
-
-    async function failGetMissingSubscriptionAsync() {
+    async function getSubscriptionsAsync(subscriptionId: string) {
       try {
-        await chai.request(Url.Query).get('/subscriptions/' + 'invalid id');
+        let res = await chai.request(Url.Query).get('/subscriptions/' + subscriptionId);
+        expect(res).to.have.status(200);
       } catch (err) {
         expect(err).to.have.status(404);
       }
     }
 
-    async function deleteSubscriptionAsync() {
-      let removeRes = await removeSubscriptionAsync(Url.Query, testId);
-      expect(removeRes).to.have.status(204);
-    }
-
-    async function failDeleteMissingSubscriptionAsync() {
+    async function deleteSubscriptionAsync(subscriptionId: string) {
       try {
-        await removeSubscriptionAsync(Url.Query, 'invalid id');
+        let res = await chai.request(Url.Query).del('/subscriptions/' + subscriptionId);
+        expect(res).to.have.status(204);
       } catch (err) {
-        expect(err).to.have.status(403);
+        expect(err).to.have.status(404);
       }
     }
 
@@ -152,11 +144,11 @@ describe('Query', () => {
       });
 
       it('should get a single subscription', () => {
-        return failGetMissingSubscriptionAsync();
+        return getSubscriptionsAsync(invalidId);
       });
 
       it('should delete a single subscription', () => {
-        return failDeleteMissingSubscriptionAsync();
+        return deleteSubscriptionAsync(invalidId);
       });
     });
 
@@ -182,11 +174,11 @@ describe('Query', () => {
       });
 
       it('should get a single subscription', () => {
-        return getSubscriptionAsync();
+        return getSubscriptionsAsync(testId);
       });
 
       it('should delete a single subscription', () => {
-        return deleteSubscriptionAsync();
+        return deleteSubscriptionAsync(testId);
       });
 
       it('should get subscription notification via websocket when adding a resource', () => {
