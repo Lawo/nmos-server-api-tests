@@ -22,11 +22,13 @@ describe('Query', () => {
       'persist': true
     };
 
+    let testId: string = undefined;
+
     let testNode = loadJsonFile.sync('./test/resources/node.json');
 
     ///////////////////////////////////////////////////////////////////////////
     // helper functions
-    async function addSubscriptionAsync(url: string, subscription: any) {
+    async function addSubscriptionAsync(url: string, subscription: any): Promise<ChaiHttp.Response> {
       try {
         let res = await chai.request(url)
           .post('/subscriptions')
@@ -37,7 +39,7 @@ describe('Query', () => {
       }
     }
 
-    async function removeSubscriptionAsync(url: string, id: string) {
+    async function removeSubscriptionAsync(url: string, id: string): Promise<ChaiHttp.Response> {
       try {
         let res = await chai.request(url)
           .del('/subscriptions/' + id);
@@ -48,44 +50,27 @@ describe('Query', () => {
     }
 
     async function createSubscriptionAsync() {
-      let addRes = await addSubscriptionAsync(Url.Query, testSubscription);
-      let id = addRes.body.id;
+      let res = await addSubscriptionAsync(Url.Query, testSubscription);
+      testId = res.body.id;
 
-      expect(addRes).to.have.status(201);
-
-      let removeRes = await removeSubscriptionAsync(Url.Query, id);
-      expect(removeRes).to.have.status(204);
+      expect(res).to.have.status(201);
     }
 
     async function updateSubscriptionAsync() {
-      let addRes = await addSubscriptionAsync(Url.Query, testSubscription);
-      let id = addRes.body.id;
-
       // add the same subscription again
-      let addRes2 = await addSubscriptionAsync(Url.Query, testSubscription);
+      let res = await addSubscriptionAsync(Url.Query, testSubscription);
 
-      expect(addRes2).to.have.status(200);
-      expect(addRes2.id).to.equal(addRes.id);
-
-      let removeRes = await removeSubscriptionAsync(Url.Query, id);
-      expect(removeRes).to.have.status(204);
+      expect(res).to.have.status(200);
+      expect(res.body.id).to.equal(testId);
     }
 
-    async function getSubscriptionByIdAsync() {
-      let addRes = await addSubscriptionAsync(Url.Query, testSubscription);
-      let id = addRes.body.id;
+    async function getSubscriptionAsync() {
+      let res = await chai.request(Url.Query).get('/subscriptions/' + testId);
 
-      let subscriptionsRes = await chai.request(Url.Query).get('/subscriptions');
-      let subscription = subscriptionsRes.body.find((item: any) => item.id === id);
-
-      let subscriptionRes = await chai.request(Url.Query).get('/subscriptions/' + subscription.id);
-      expect(subscriptionRes).to.have.status(200);
-
-      let removeRes = await removeSubscriptionAsync(Url.Query, id);
-      expect(removeRes).to.have.status(204);
+      expect(res).to.have.status(200);
     }
 
-    async function failGetMissingSubscriptionByIdAsync() {
+    async function failGetMissingSubscriptionAsync() {
       try {
         await chai.request(Url.Query).get('/subscriptions/' + 'invalid id');
       } catch (err) {
@@ -94,10 +79,7 @@ describe('Query', () => {
     }
 
     async function deleteSubscriptionAsync() {
-      let addRes = await addSubscriptionAsync(Url.Query, testSubscription);
-      let id = addRes.body.id;
-
-      let removeRes = await removeSubscriptionAsync(Url.Query, id);
+      let removeRes = await removeSubscriptionAsync(Url.Query, testId);
       expect(removeRes).to.have.status(204);
     }
 
@@ -110,11 +92,8 @@ describe('Query', () => {
     }
 
     async function getSubscriptionNotificationAsync() {
-      let addRes = await addSubscriptionAsync(Url.Query, testSubscription);
-      let id = addRes.body.id;
-
       let subscriptionsRes = await chai.request(Url.Query).get('/subscriptions');
-      let subscription = subscriptionsRes.body.find((item: any) => item.id === id);
+      let subscription = subscriptionsRes.body.find((item: any) => item.id === testId);
 
       let ws = new WebSocket(subscription.ws_href);
 
@@ -141,12 +120,9 @@ describe('Query', () => {
       ]);
 
       expect(resourceRes).to.have.status(201);
-      expect(dataEntriesRes[0].post.id === id);
+      expect(dataEntriesRes[0].post.id === testId);
 
       ws.close();
-
-      let removeRes = await removeSubscriptionAsync(Url.Query, id);
-      expect(removeRes).to.have.status(204);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -162,12 +138,21 @@ describe('Query', () => {
     });
 
     describe('no subscription created yet', () => {
+
+      // hooks
+      afterEach(() => {
+        return (async () => {
+          await removeSubscriptionAsync(Url.Query, testId);
+          testId = undefined;
+        })();
+      });
+
       it('should create a websocket subscription to an API resource', () => {
         return createSubscriptionAsync();
       });
 
       it('should get a single subscription', () => {
-        return failGetMissingSubscriptionByIdAsync();
+        return failGetMissingSubscriptionAsync();
       });
 
       it('should delete a single subscription', () => {
@@ -176,12 +161,28 @@ describe('Query', () => {
     });
 
     describe('subscription already created', () => {
+
+      // hooks
+      beforeEach(() => {
+        return (async () => {
+          let res = await addSubscriptionAsync(Url.Query, testSubscription);
+          testId = res.body.id;
+        })();
+      });
+
+      afterEach(() => {
+        return (async () => {
+          await removeSubscriptionAsync(Url.Query, testId);
+          testId = undefined;
+        })();
+      });
+
       it('should create a websocket subscription to an API resource', () => {
         return updateSubscriptionAsync();
       });
 
       it('should get a single subscription', () => {
-        return getSubscriptionByIdAsync();
+        return getSubscriptionAsync();
       });
 
       it('should delete a single subscription', () => {
