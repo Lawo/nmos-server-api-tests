@@ -1,11 +1,14 @@
 import { expect } from 'chai';
 import { Hooks } from './../util/hooks';
 import { Query } from './../util/query';
+import { Subscription } from './../util/subscription';
 import { Url } from './../util/url';
 
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 chai.use(chaiHttp);
+import chaiJsonSchema = require('chai-json-schema');
+chai.use(chaiJsonSchema);
 
 import loadJsonFile = require('load-json-file');
 import WebSocket = require('ws');
@@ -26,51 +29,36 @@ describe('Query', () => {
     let invalidId = '00000000-0000-1000-8000-000000000000';
 
     let testNode = loadJsonFile.sync('./test/resources/node.json');
+    let subscriptionResponseSchema = loadJsonFile.sync('./specification/schemas/queryapi-subscription-response.json');
+    let errorSchema = loadJsonFile.sync('./specification/schemas/error.json');
 
-    ///////////////////////////////////////////////////////////////////////////
-    // helper functions
-    async function addSubscriptionAsync(url: string, subscription: any): Promise<ChaiHttp.Response> {
-      try {
-        let res = await chai.request(url)
-          .post('/subscriptions')
-          .send(subscription);
-        return res;
-      } catch (err) {
-        return err;
-      }
-    }
-
-    async function removeSubscriptionAsync(url: string, id: string): Promise<ChaiHttp.Response> {
-      try {
-        let res = await chai.request(url)
-          .del('/subscriptions/' + id);
-        return res;
-      } catch (err) {
-        return err;
-      }
-    }
-
+    // functions
     async function createSubscriptionAsync() {
-      let res = await addSubscriptionAsync(Url.Query, testSubscription);
+      let res = await Subscription.addAsync(Url.Query, testSubscription);
       testId = res.body.id;
 
       expect(res).to.have.status(201);
+      expect(res.body).to.be.jsonSchema(subscriptionResponseSchema);
     }
 
     async function updateSubscriptionAsync() {
       // add the same subscription again
-      let res = await addSubscriptionAsync(Url.Query, testSubscription);
+      let res = await Subscription.addAsync(Url.Query, testSubscription);
 
       expect(res).to.have.status(200);
       expect(res.body.id).to.equal(testId);
+      expect(res.body).to.be.jsonSchema(subscriptionResponseSchema);
     }
 
     async function getSubscriptionsAsync(subscriptionId: string) {
       try {
         let res = await chai.request(Url.Query).get('/subscriptions/' + subscriptionId);
         expect(res).to.have.status(200);
+        expect(res.body).to.be.jsonSchema(subscriptionResponseSchema);
       } catch (err) {
         expect(err).to.have.status(404);
+        expect(err.response.body.code).to.equal(404);
+        expect(err.response.body).to.be.jsonSchema(errorSchema);
       }
     }
 
@@ -80,6 +68,7 @@ describe('Query', () => {
         expect(res).to.have.status(204);
       } catch (err) {
         expect(err).to.have.status(404);
+        expect(err.response.body.code).to.equal(404);
       }
     }
 
@@ -101,23 +90,24 @@ describe('Query', () => {
         'data': testNode
       };
 
-      let [resourceRes, dataEntriesRes] = await Promise.all([
+      let [resourceRes, dataRes] = await Promise.all([
         chai.request(Url.Registration).post('/resource').send(body),
         new Promise<any>((resolve) => {
           ws.onmessage = e => {
-            let dataEntries = JSON.parse(e.data).grain.data;
-            resolve(dataEntries);
+            let data = JSON.parse(e.data);
+            resolve(data);
           };
         })
       ]);
 
       expect(resourceRes).to.have.status(201);
-      expect(dataEntriesRes[0].post.id === testId);
+      expect(dataRes.grain.data[0].post.id === testId);
+      // Todo: Schema can not find the referenced schemas
+      // let websocketSchema = loadJsonFile.sync('./specification/schemas/queryapi-v1.0-subscriptions-websocket.json');
+      // expect(dataRes).to.be.jsonSchema(websocketSchema);
 
       ws.close();
     }
-
-    ///////////////////////////////////////////////////////////////////////////
 
     // hooks
     afterEach((done) => {
@@ -134,7 +124,7 @@ describe('Query', () => {
       // hooks
       afterEach(() => {
         return (async () => {
-          await removeSubscriptionAsync(Url.Query, testId);
+          await Subscription.removeAsync(Url.Query, testId);
           testId = undefined;
         })();
       });
@@ -157,14 +147,14 @@ describe('Query', () => {
       // hooks
       beforeEach(() => {
         return (async () => {
-          let res = await addSubscriptionAsync(Url.Query, testSubscription);
+          let res = await Subscription.addAsync(Url.Query, testSubscription);
           testId = res.body.id;
         })();
       });
 
       afterEach(() => {
         return (async () => {
-          await removeSubscriptionAsync(Url.Query, testId);
+          await Subscription.removeAsync(Url.Query, testId);
           testId = undefined;
         })();
       });

@@ -27,14 +27,4 @@ export class Hooks {
         done();
       });
   }
-
-  // hooks
-  public static addSubscription(done: MochaDone, url: string, testSubscription: Object) {
-    chai.request(url)
-      .post('/subscriptions')
-      .send(testSubscription)
-      .end((err, res) => {
-        done();
-      });
-  }
 }
