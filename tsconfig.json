@@ -9,6 +9,11 @@
     "removeComments": false,
     "noImplicitAny": true,
     "noUnusedLocals": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "baseUrl": "types",
+    "typeRoots": [
+      "types",
+      "node_modules/@types"
+    ]
   }
 }
