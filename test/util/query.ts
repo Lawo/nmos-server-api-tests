@@ -20,6 +20,12 @@ export class Query {
       });
   }
 
+  public static async listAllAsync(url: string, resourceType: string) {
+    let res = await chai.request(url).get('/' + resourceType);
+    expect(res).to.have.status(200);
+    expect(res).to.be.json;
+  }
+
   public static validateSchema(done: MochaDone, url: string, resourceType: string, schemaFile: string) {
     chai.request(url)
       .get('/' + resourceType)

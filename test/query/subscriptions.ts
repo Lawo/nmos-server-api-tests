@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import { Hooks } from './../util/hooks';
+import { JsonSchema } from './../util/jsonSchema';
 import { Query } from './../util/query';
 import { Subscription } from './../util/subscription';
 import { Url } from './../util/url';
@@ -7,8 +8,6 @@ import { Url } from './../util/url';
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 chai.use(chaiHttp);
-import chaiJsonSchema = require('chai-json-schema');
-chai.use(chaiJsonSchema);
 
 import loadJsonFile = require('load-json-file');
 import WebSocket = require('ws');
@@ -29,8 +28,8 @@ describe('Query', () => {
     let invalidId = '00000000-0000-1000-8000-000000000000';
 
     let testNode = loadJsonFile.sync('./test/resources/node.json');
-    let subscriptionResponseSchema = loadJsonFile.sync('./specification/schemas/queryapi-subscription-response.json');
-    let errorSchema = loadJsonFile.sync('./specification/schemas/error.json');
+    let subscriptionResponseSchema2 = new JsonSchema('./specification/schemas', 'queryapi-subscription-response.json');
+    let errorSchema = new JsonSchema('./specification/schemas', 'error.json');
 
     // functions
     async function createSubscriptionAsync() {
@@ -38,8 +37,8 @@ describe('Query', () => {
       testId = res.body.id;
 
       expect(res).to.have.status(201);
-      expect(res.body).to.be.jsonSchema(subscriptionResponseSchema);
-    }
+      subscriptionResponseSchema2.validate(res.body);
+    };
 
     async function updateSubscriptionAsync() {
       // add the same subscription again
@@ -47,18 +46,19 @@ describe('Query', () => {
 
       expect(res).to.have.status(200);
       expect(res.body.id).to.equal(testId);
-      expect(res.body).to.be.jsonSchema(subscriptionResponseSchema);
+      subscriptionResponseSchema2.validate(res.body);
     }
 
     async function getSubscriptionsAsync(subscriptionId: string) {
       try {
         let res = await chai.request(Url.Query).get('/subscriptions/' + subscriptionId);
+
         expect(res).to.have.status(200);
-        expect(res.body).to.be.jsonSchema(subscriptionResponseSchema);
+        subscriptionResponseSchema2.validate(res.body);
       } catch (err) {
         expect(err).to.have.status(404);
         expect(err.response.body.code).to.equal(404);
-        expect(err.response.body).to.be.jsonSchema(errorSchema);
+        errorSchema.validate(err.response.body);
       }
     }
 
@@ -102,9 +102,9 @@ describe('Query', () => {
 
       expect(resourceRes).to.have.status(201);
       expect(dataRes.grain.data[0].post.id === testId);
-      // Todo: Schema can not find the referenced schemas
-      // let websocketSchema = loadJsonFile.sync('./specification/schemas/queryapi-v1.0-subscriptions-websocket.json');
-      // expect(dataRes).to.be.jsonSchema(websocketSchema);
+
+      let websocketSchema = new JsonSchema('./specification/schemas', 'queryapi-v1.0-subscriptions-websocket.json');
+      websocketSchema.validate(dataRes);
 
       ws.close();
     }
@@ -115,8 +115,8 @@ describe('Query', () => {
     });
 
     // test cases
-    it('should list all subscriptions on /subscriptions GET', (done) => {
-      Query.listAll(done, Url.Query, 'subscriptions');
+    it('should list all subscriptions on /subscriptions GET', () => {
+      return Query.listAllAsync(Url.Query, 'subscriptions');
     });
 
     describe('no subscription created yet', () => {
