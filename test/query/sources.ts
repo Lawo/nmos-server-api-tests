@@ -19,40 +19,32 @@ describe('Query', () => {
     });
 
     // test cases
-    it('should list all sources on /sources GET', (done) => {
-      Query.listAll(done, Url.Query, 'sources');
+    it('should list all sources', () => {
+      return Query.listAllAsync(Url.Query, 'sources', 'sources.json');
     });
 
-    it('should validate against JSON-schema', (done) => {
-      Query.validateSchema(done, Url.Query, 'sources', './specification/schemas/source.json');
+    it('should return the desired source by device_id', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'sources', 'sources.json', 'device_id', testSource.device_id);
     });
 
-    it('should contain the test sources', (done) => {
-      Query.containTestResource(done, Url.Query, 'sources', testSource.label);
+    it('should return the desired source by label', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'sources', 'sources.json', 'label', testSource.label);
     });
 
-    it('should return the desired source by device_id', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'sources', 'device_id', testSource.device_id);
+    it('should return the desired source by description', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'sources', 'sources.json', 'description', testSource.description);
     });
 
-    it('should return the desired source by label', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'sources', 'label', testSource.label);
+    it('should return the desired source by format', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'sources', 'sources.json', 'format', testSource.format);
     });
 
-    it('should return the desired source by description', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'sources', 'description', testSource.description);
+    it('should get a single source by id', () => {
+      return Query.getResourceByIdAsync(Url.Query, 'sources', 'source.json', testSource.id);
     });
 
-    it('should return the desired source by format', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'sources', 'format', testSource.format);
-    });
-
-    it('should get a single source by id', (done) => {
-      Query.getSingleResourceById(done, Url.Query, 'sources', testSource.id);
-    });
-
-    it('should return an error when the requested source id does not exist', (done) => {
-      Query.failGetNonExistentResource(done, Url.Query, 'sources');
+    it('should return an error when the requested source id does not exist', () => {
+      return Query.getResourceByIdAsync(Url.Query, 'sources', 'source.json', 'nonexistent id');
     });
 
   });

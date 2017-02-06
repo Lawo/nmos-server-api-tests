@@ -19,40 +19,32 @@ describe('Query', () => {
     });
 
     // test cases
-    it('should list all flows on /flows GET', (done) => {
-      Query.listAll(done, Url.Query, 'flows');
+    it('should list all flows', () => {
+      return Query.listAllAsync(Url.Query, 'flows', 'flows.json');
     });
 
-    it('should validate against JSON-schema', (done) => {
-      Query.validateSchema(done, Url.Query, 'flows', './specification/schemas/flow.json');
+    it('should return the desired flow by source_id', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'flows', 'flows.json', 'source_id', testFlow.source_id);
     });
 
-    it('should contain the test flows', (done) => {
-      Query.containTestResource(done, Url.Query, 'flows', testFlow.label);
+    it('should return the desired flow by label', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'flows', 'flows.json', 'label', testFlow.label);
     });
 
-    it('should return the desired flow by source_id', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'flows', 'source_id', testFlow.source_id);
+    it('should return the desired flow by description', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'flows', 'flows.json', 'description', testFlow.description);
     });
 
-    it('should return the desired flow by label', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'flows', 'label', testFlow.label);
+    it('should return the desired flow by format', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'flows', 'flows.json', 'format', testFlow.format);
     });
 
-    it('should return the desired flow by description', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'flows', 'description', testFlow.description);
+    it('should get a single flow by id', () => {
+      return Query.getResourceByIdAsync(Url.Query, 'flows', 'flow.json', testFlow.id);
     });
 
-    it('should return the desired flow by format', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'flows', 'format', testFlow.format);
-    });
-
-    it('should get a single flow by id', (done) => {
-      Query.getSingleResourceById(done, Url.Query, 'flows', testFlow.id);
-    });
-
-    it('should return an error when the requested flow id does not exist', (done) => {
-      Query.failGetNonExistentResource(done, Url.Query, 'flows');
+    it('should return an error when the requested flow id does not exist', () => {
+      return Query.getResourceByIdAsync(Url.Query, 'flows', 'flow.json', 'nonexistent id');
     });
 
   });

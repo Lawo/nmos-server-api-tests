@@ -19,40 +19,32 @@ describe('Query', () => {
     });
 
     // test cases
-    it('should list all receivers on /receivers GET', (done) => {
-      Query.listAll(done, Url.Query, 'receivers');
+    it('should list all receivers', () => {
+      return Query.listAllAsync(Url.Query, 'receivers', 'receivers.json');
     });
 
-    it('should validate against JSON-schema', (done) => {
-      Query.validateSchema(done, Url.Query, 'receivers', './specification/schemas/receiver.json');
+    it('should return the desired receiver by label', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'receivers', 'receivers.json', 'label', testReceiver.label);
     });
 
-    it('should contain the test receivers', (done) => {
-      Query.containTestResource(done, Url.Query, 'receivers', testReceiver.label);
+    it('should return the desired receiver by description', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'receivers', 'receivers.json', 'description', testReceiver.description);
     });
 
-    it('should return the desired receiver by label', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'receivers', 'label', testReceiver.label);
+    it('should return the desired receiver by format', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'receivers', 'receivers.json', 'format', testReceiver.format);
     });
 
-    it('should return the desired receiver by description', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'receivers', 'description', testReceiver.description);
+    it('should return the desired receiver by transport', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'receivers', 'receivers.json', 'transport', testReceiver.transport);
     });
 
-    it('should return the desired receiver by format', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'receivers', 'format', testReceiver.format);
+    it('should get a single receiver by id', () => {
+      return Query.getResourceByIdAsync(Url.Query, 'receivers', 'receiver.json', testReceiver.id);
     });
 
-    it('should return the desired receiver by transport', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'receivers', 'transport', testReceiver.transport);
-    });
-
-    it('should get a single receiver by id', (done) => {
-      Query.getSingleResourceById(done, Url.Query, 'receivers', testReceiver.id);
-    });
-
-    it('should return an error when the requested receiver id does not exist', (done) => {
-      Query.failGetNonExistentResource(done, Url.Query, 'receivers');
+    it('should return an error when the requested receiver id does not exist', () => {
+      return Query.getResourceByIdAsync(Url.Query, 'receivers', 'receiver.json', 'nonexisten id');
     });
 
   });

@@ -19,24 +19,16 @@ describe('Query', () => {
     });
 
     // test cases
-    it('should list all nodes on /nodes GET', (done) => {
-      Query.listAll(done, Url.Query, 'nodes');
+    it('should list all nodes', () => {
+      return Query.listAllAsync(Url.Query, 'nodes', 'nodes.json');
     });
 
-    it('should validate against JSON-schema', (done) => {
-      Query.validateSchema(done, Url.Query, 'nodes', './specification/schemas/node.json');
+    it('should get a single node by id', () => {
+      return Query.getResourceByIdAsync(Url.Query, 'nodes', 'node.json', testNode.id);
     });
 
-    it('should contain the test nodes', (done) => {
-      Query.containTestResource(done, Url.Query, 'nodes', testNode.label);
-    });
-
-    it('should get a single node by id', (done) => {
-      Query.getSingleResourceById(done, Url.Query, 'nodes', testNode.id);
-    });
-
-    it('should return an error when the requested node id does not exist', (done) => {
-      Query.failGetNonExistentResource(done, Url.Query, 'nodes');
+    it('should return an error when the requested node id does not exist', () => {
+      return Query.getResourceByIdAsync(Url.Query, 'nodes', 'node.json', 'nonexisten id');
     });
 
   });

@@ -19,40 +19,32 @@ describe('Query', () => {
     });
 
     // test cases
-    it('should list all senders on /senders GET', (done) => {
-      Query.listAll(done, Url.Query, 'senders');
+    it('should list all senders', () => {
+      return Query.listAllAsync( Url.Query, 'senders', 'senders.json');
     });
 
-    it('should validate against JSON-schema', (done) => {
-      Query.validateSchema(done, Url.Query, 'senders', './specification/schemas/sender.json');
+    it('should return the desired sender by flow_id', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'senders', 'senders.json', 'flow_id', testSender.flow_id);
     });
 
-    it('should contain the test senders', (done) => {
-      Query.containTestResource(done, Url.Query, 'senders', testSender.label);
+    it('should return the desired sender by label', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'senders', 'senders.json', 'label', testSender.label);
     });
 
-    it('should return the desired sender by flow_id', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'senders', 'flow_id', testSender.flow_id);
+    it('should return the desired sender by description', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'senders', 'senders.json', 'description', testSender.description);
     });
 
-    it('should return the desired sender by label', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'senders', 'label', testSender.label);
+    it('should return the desired sender by transport', () => {
+      return Query.getResourcesByParameterAsync(Url.Query, 'senders', 'senders.json', 'transport', testSender.transport);
     });
 
-    it('should return the desired sender by description', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'senders', 'description', testSender.description);
+    it('should get a single sender by id', () => {
+      return Query.getResourceByIdAsync(Url.Query, 'senders', 'sender.json', testSender.id);
     });
 
-    it('should return the desired sender by transport', (done) => {
-      Query.getResourceByParameter(done, Url.Query, 'senders', 'transport', testSender.transport);
-    });
-
-    it('should get a single sender by id', (done) => {
-      Query.getSingleResourceById(done, Url.Query, 'senders', testSender.id);
-    });
-
-    it('should return an error when the requested sender id does not exist', (done) => {
-      Query.failGetNonExistentResource(done, Url.Query, 'senders');
+    it('should return an error when the requested sender id does not exist', () => {
+      return Query.getResourceByIdAsync(Url.Query, 'senders', 'sender.json', 'nonexistent id');
     });
 
   });

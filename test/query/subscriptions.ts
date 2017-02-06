@@ -115,10 +115,6 @@ describe('Query', () => {
     });
 
     // test cases
-    it('should list all subscriptions on /subscriptions GET', () => {
-      return Query.listAllAsync(Url.Query, 'subscriptions');
-    });
-
     describe('no subscription created yet', () => {
 
       // hooks
@@ -157,6 +153,10 @@ describe('Query', () => {
           await Subscription.removeAsync(Url.Query, testId);
           testId = undefined;
         })();
+      });
+
+      it('should list all subscriptions', () => {
+        return Query.listAllAsync(Url.Query, 'subscriptions', 'queryapi-subscriptions-response.json');
       });
 
       it('should create a websocket subscription to an API resource', () => {

@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { JsonSchema } from './../util/jsonSchema';
 
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
@@ -6,79 +7,45 @@ chai.use(chaiHttp);
 import chaiJsonSchema = require('chai-json-schema');
 chai.use(chaiJsonSchema);
 
-import loadJsonFile = require('load-json-file');
-
 export class Query {
   // test cases
-  public static listAll(done: MochaDone, url: string, resourceType: string) {
-    chai.request(url)
-      .get('/' + resourceType)
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res).to.be.json;
-        done();
-      });
-  }
-
-  public static async listAllAsync(url: string, resourceType: string) {
+  public static async listAllAsync(url: string, resourceType: string, schemaFile: string) {
     let res = await chai.request(url).get('/' + resourceType);
+
     expect(res).to.have.status(200);
     expect(res).to.be.json;
+
+    let schema = new JsonSchema('./specification/schemas', schemaFile);
+    schema.validate(res.body);
   }
 
-  public static validateSchema(done: MochaDone, url: string, resourceType: string, schemaFile: string) {
-    chai.request(url)
-      .get('/' + resourceType)
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        let schema = loadJsonFile.sync(schemaFile);
+  public static async getResourcesByParameterAsync(
+    url: string,
+    resourceType: string,
+    schemaFile: string,
+    parameterKey: string,
+    parameterValue: string) {
+    let res = await chai.request(url).get('/' + resourceType).field(parameterKey, parameterValue);
 
-        res.body.forEach((entry: any) => {
-          expect(entry).to.be.jsonSchema(schema);
-        });
+    expect(res).to.have.status(200);
+    expect(res.body.some((entry: any) => entry[parameterKey] === parameterValue)).to.be.true;
 
-        done();
-      });
+    let schema = new JsonSchema('./specification/schemas', schemaFile);
+    schema.validate(res.body);
   }
 
-  public static containTestResource(done: MochaDone, url: string, resourceType: string, label: string) {
-    chai.request(url)
-      .get('/' + resourceType)
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body.some((entry: any) => entry.label === label)).to.be.true;
-        done();
-      });
-  }
+  public static async getResourceByIdAsync(url: string, resourceType: string, schemaFile: string, id: string) {
+    try {
+      let res = await chai.request(url).get('/' + resourceType + '/' + id);
 
-  public static getResourceByParameter(done: MochaDone, url: string, resourceType: string, parameterKey: string, parameterValue: string) {
-    chai.request(url)
-      .get('/' + resourceType)
-      .field(parameterKey, parameterValue)
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body.some((entry: any) => entry[parameterKey] === parameterValue)).to.be.true;
-        done();
-      });
-  }
+      expect(res).to.have.status(200);
+      expect(res.body.id).to.equal(id);
 
-  public static getSingleResourceById(done: MochaDone, url: string, resourceType: string, id: string) {
-    chai.request(url)
-      .get('/' + resourceType + '/' + id)
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body.id).to.equal(id);
-        done();
-      });
-  }
-
-  public static failGetNonExistentResource(done: MochaDone, url: string, resourceType: string) {
-    chai.request(url)
-      .get('/' + resourceType + '/nonexistent id')
-      .end((err, res) => {
-        expect(res).to.have.status(404);
-        done();
-      });
+      let schema = new JsonSchema('./specification/schemas', schemaFile);
+      schema.validate(res.body);
+    } catch (err) {
+      expect(err).to.have.status(404);
+    }
   }
 
 }
