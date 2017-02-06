@@ -4,8 +4,6 @@ import { JsonSchema } from './../util/jsonSchema';
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 chai.use(chaiHttp);
-import chaiJsonSchema = require('chai-json-schema');
-chai.use(chaiJsonSchema);
 
 export class Query {
   // test cases

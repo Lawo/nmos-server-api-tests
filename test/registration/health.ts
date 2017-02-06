@@ -21,12 +21,12 @@ describe('Registration', () => {
       });
 
       // test cases
-      it('should show a node\'s health (for debug use only)', (done) => {
-        Registration.getNodeHealth(done, Url.Registration, testNode.id, 200);
+      it('should show a node\'s health (for debug use only)', () => {
+        return Registration.getNodeHealthAsync(Url.Registration, testNode.id);
       });
 
-      it('should update node health', (done) => {
-        Registration.updateNodeHealth(done, Url.Registration, testNode.id, 200);
+      it('should update node health', () => {
+        return Registration.updateNodeHealthAsync(Url.Registration, testNode.id);
       });
 
     });
@@ -34,12 +34,12 @@ describe('Registration', () => {
     describe('node is missing', () => {
 
       // test cases
-      it('should fail when trying to show a missing node\'s health (for debug use only)', (done) => {
-        Registration.getNodeHealth(done, Url.Registration, testNode.id, 404);
+      it('should fail when trying to show a missing node\'s health (for debug use only)', () => {
+        return Registration.getNodeHealthAsync(Url.Registration, testNode.id);
       });
 
-      it('should fail to update a missing node\'s health', (done) => {
-        Registration.updateNodeHealth(done, Url.Registration, testNode.id, 404);
+      it('should fail to update a missing node\'s health', () => {
+        return Registration.updateNodeHealthAsync(Url.Registration, testNode.id);
       });
 
     });

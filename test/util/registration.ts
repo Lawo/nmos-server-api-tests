@@ -1,73 +1,86 @@
 import { expect } from 'chai';
+import { JsonSchema } from './../util/jsonSchema';
 
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 chai.use(chaiHttp);
-import chaiJsonSchema = require('chai-json-schema');
-chai.use(chaiJsonSchema);
 
 export class Registration {
   // test cases
-  public static createOrUpdateResource(done: MochaDone, url: string, type: string, testResource: any, schema: any, status: number) {
+  public static async createOrUpdateResourceAsync(url: string, type: string, testResource: any, status: number) {
     let body = {
       'type': type,
       'data': testResource
     };
 
-    chai.request(url)
-      .post('/resource')
-      .send(body)
-      .end((err, res) => {
-        expect(res).to.have.status(status);
-        expect((<any>res).headers).property('location');
-        expect(res.body).to.be.jsonSchema(schema);
-        done();
-      });
+    let res = await chai.request(url).post('/resource').send(body);
+
+    expect(res).to.have.status(status);
+    expect((<any>res).headers).property('location');
+
+    let schema = new JsonSchema('./specification/schemas', 'registrationapi-resource-response.json');
+    schema.validate(res.body);
   }
 
-  public static getResource(done: MochaDone, url: string, resourceType: string, id: string, status: number) {
-    chai.request(url)
-      .get(['/resource', resourceType, id].join('/'))
-      .end((err, res) => {
-        expect(res).to.have.status(status);
-        done();
-      });
+  public static async getResourceAsync(url: string, resourceType: string, id: string) {
+    try {
+      let res = await chai.request(url).get(['/resource', resourceType, id].join('/'));
+      expect(res).to.have.status(200);
+
+      let schema = new JsonSchema('./specification/schemas', 'registrationapi-resource-response.json');
+      schema.validate(res.body);
+    } catch (err) {
+      expect(err).to.have.status(404);
+
+      let schema = new JsonSchema('./specification/schemas', 'error.json');
+      schema.validate(err.response.body);
+    }
   }
 
-  public static deleteResource(done: MochaDone, url: string, resourceType: string, id: string, status: number) {
-    chai.request(url)
-      .del(['/resource', resourceType, id].join('/'))
-      .end((err, res) => {
-        expect(res).to.have.status(status);
-        done();
-      });
+  public static async deleteResourceAsync(url: string, resourceType: string, id: string) {
+    try {
+      let res = await chai.request(url).del(['/resource', resourceType, id].join('/'));
+      expect(res).to.have.status(204);
+    } catch (err) {
+      expect(err).to.have.status(404);
+
+      let schema = new JsonSchema('./specification/schemas', 'error.json');
+      schema.validate(err.response.body);
+    }
   }
 
-  public static getNodeHealth(done: MochaDone, url: string, id: string, status: number) {
-    chai.request(url)
-      .get('/health/nodes/' + id)
-      .end(function (err, res) {
-        expect(res).to.have.status(status);
+  public static async getNodeHealthAsync(url: string, id: string) {
+    try {
+      let res = await chai.request(url).get('/health/nodes/' + id);
 
-        if (status === 200) {
-          expect(res.body).to.have.property('health');
-        }
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('health');
 
-        done();
-      });
+      let schema = new JsonSchema('./specification/schemas', 'registrationapi-health-response.json');
+      schema.validate(res.body);
+    } catch (err) {
+      expect(err).to.have.status(404);
+
+      let schema = new JsonSchema('./specification/schemas', 'error.json');
+      schema.validate(err.response.body);
+    }
   }
 
-  public static updateNodeHealth(done: MochaDone, url: string, id: string, status: number) {
-    chai.request(url)
-      .post('/health/nodes/' + id)
-      .end(function (err, res) {
-        expect(res).to.have.status(status);
+  public static async updateNodeHealthAsync(url: string, id: string) {
+    try {
+      let res = await chai.request(url).post('/health/nodes/' + id);
 
-        if (status === 200) {
-          expect(res.body).to.have.property('health');
-        }
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('health');
 
-        done();
-      });
+      let schema = new JsonSchema('./specification/schemas', 'registrationapi-health-response.json');
+      schema.validate(res.body);
+    } catch (err) {
+      expect(err).to.have.status(404);
+
+      let schema = new JsonSchema('./specification/schemas', 'error.json');
+      schema.validate(err.response.body);
+    }
   }
+
 }
