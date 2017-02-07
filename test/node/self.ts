@@ -1,27 +1,24 @@
 import { expect } from 'chai';
+import { JsonSchema } from './../util/jsonSchema';
 import { Url } from './../util/url';
 
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 chai.use(chaiHttp);
-import chaiJsonSchema = require('chai-json-schema');
-chai.use(chaiJsonSchema);
-
-import loadJsonFile = require('load-json-file');
 
 describe('Node', () => {
   describe('Self', () => {
 
-    it('should validate against JSON-schema', (done) => {
-      chai.request(Url.Node)
-        .get('/self')
-        .end(function (err, res) {
-          expect(res).to.have.status(200);
-          expect(res).to.be.json;
-          let schema = loadJsonFile.sync('./specification/schemas/node.json');
-          expect(res.body).to.be.jsonSchema(schema);
-          done();
-        });
+    it('should get information about this node', () => {
+      return (async () => {
+        let res = await chai.request(Url.Node).get('/self');
+
+        expect(res).to.have.status(200);
+        expect(res).to.be.json;
+
+        let schema = new JsonSchema('./specification/schemas', 'node.json');
+        schema.validate(res.body);
+      })();
     });
 
   });
