@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { JsonSchema } from './../util/jsonSchema';
+import { Error } from './error';
+import { JsonSchema } from './jsonSchema';
 
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
@@ -30,10 +31,7 @@ export class Registration {
       let schema = new JsonSchema('./specification/schemas', 'registrationapi-resource-response.json');
       schema.validate(res.body);
     } catch (err) {
-      expect(err).to.have.status(404);
-
-      let schema = new JsonSchema('./specification/schemas', 'error.json');
-      schema.validate(err.response.body);
+      Error.validate(err, 404);
     }
   }
 
@@ -42,10 +40,7 @@ export class Registration {
       let res = await chai.request(url).del(['/resource', resourceType, id].join('/'));
       expect(res).to.have.status(204);
     } catch (err) {
-      expect(err).to.have.status(404);
-
-      let schema = new JsonSchema('./specification/schemas', 'error.json');
-      schema.validate(err.response.body);
+      Error.validate(err, 404);
     }
   }
 
@@ -59,10 +54,7 @@ export class Registration {
       let schema = new JsonSchema('./specification/schemas', 'registrationapi-health-response.json');
       schema.validate(res.body);
     } catch (err) {
-      expect(err).to.have.status(404);
-
-      let schema = new JsonSchema('./specification/schemas', 'error.json');
-      schema.validate(err.response.body);
+      Error.validate(err, 404);
     }
   }
 
@@ -76,10 +68,7 @@ export class Registration {
       let schema = new JsonSchema('./specification/schemas', 'registrationapi-health-response.json');
       schema.validate(res.body);
     } catch (err) {
-      expect(err).to.have.status(404);
-
-      let schema = new JsonSchema('./specification/schemas', 'error.json');
-      schema.validate(err.response.body);
+      Error.validate(err, 404);
     }
   }
 

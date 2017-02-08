@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { Error } from './../util/error';
 import { Hooks } from './../util/hooks';
 import { JsonSchema } from './../util/jsonSchema';
 import { Query } from './../util/query';
@@ -29,7 +30,6 @@ describe('Query', () => {
 
     let testNode = loadJsonFile.sync('./test/resources/node.json');
     let subscriptionResponseSchema2 = new JsonSchema('./specification/schemas', 'queryapi-subscription-response.json');
-    let errorSchema = new JsonSchema('./specification/schemas', 'error.json');
 
     // functions
     async function createSubscriptionAsync() {
@@ -56,9 +56,7 @@ describe('Query', () => {
         expect(res).to.have.status(200);
         subscriptionResponseSchema2.validate(res.body);
       } catch (err) {
-        expect(err).to.have.status(404);
-        expect(err.response.body.code).to.equal(404);
-        errorSchema.validate(err.response.body);
+        Error.validate(err, 404);
       }
     }
 
@@ -67,8 +65,7 @@ describe('Query', () => {
         let res = await chai.request(Url.Query).del('/subscriptions/' + subscriptionId);
         expect(res).to.have.status(204);
       } catch (err) {
-        expect(err).to.have.status(404);
-        expect(err.response.body.code).to.equal(404);
+        Error.validate(err, 404);
       }
     }
 

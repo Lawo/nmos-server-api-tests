@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { JsonSchema } from './../util/jsonSchema';
+import { Error } from './error';
+import { JsonSchema } from './jsonSchema';
 
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
@@ -27,7 +28,7 @@ export class Node {
       let schema = new JsonSchema('./specification/schemas', schemaFile);
       schema.validate(res.body);
     } catch (err) {
-      expect(err).to.have.status(404);
+      Error.validate(err, 404);
     }
   }
 
@@ -50,7 +51,7 @@ export class Node {
       let schema = new JsonSchema('./specification/schemas', 'sender.json');
       schema.validate(res.body);
     } catch (err) {
-      expect(err).to.have.status(errorCode);
+      Error.validate(err, errorCode);
     }
   };
 

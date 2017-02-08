@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { JsonSchema } from './../util/jsonSchema';
+import { Error } from './error';
+import { JsonSchema } from './jsonSchema';
 
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
@@ -26,7 +27,7 @@ export class Base {
     try {
       await chai.request(url).post('/');
     } catch (err) {
-      expect(err).to.have.status(405);
+      Error.validate(err, 405);
     }
   }
 
