@@ -1,5 +1,5 @@
-import { Hooks } from './../util/hooks';
 import { Registration } from './../util/registration';
+import { Resource } from './../util/resource';
 import { Url } from './../util/url';
 
 import loadJsonFile = require('load-json-file');
@@ -47,8 +47,8 @@ describe('Registration', () => {
 
         describe('not registered', () => {
           // hooks
-          afterEach((done) => {
-            Hooks.removeResource(done, Url.Registration, resource.resourceType, testResource.id);
+          afterEach(() => {
+            return Resource.removeAsync(Url.Registration, resource.resourceType, testResource.id);
           });
 
           // test cases
@@ -68,12 +68,12 @@ describe('Registration', () => {
 
         describe('already registered', () => {
           // hooks
-          beforeEach((done) => {
-            Hooks.addResource(done, Url.Registration, resource.type, testResource);
+          beforeEach(() => {
+            return Resource.addAsync(Url.Registration, resource.type, testResource);
           });
 
-          afterEach((done) => {
-            Hooks.removeResource(done, Url.Registration, resource.resourceType, testResource.id);
+          afterEach(() => {
+            return Resource.removeAsync(Url.Registration, resource.resourceType, testResource.id);
           });
 
           // test cases

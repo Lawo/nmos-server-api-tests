@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { Error } from './../util/error';
-import { Hooks } from './../util/hooks';
 import { JsonSchema } from './../util/jsonSchema';
 import { Query } from './../util/query';
+import { Resource } from './../util/resource';
 import { Subscription } from './../util/subscription';
 import { Url } from './../util/url';
 
@@ -107,8 +107,8 @@ describe('Query', () => {
     }
 
     // hooks
-    afterEach((done) => {
-      Hooks.removeResource(done, Url.Registration, 'nodes', testNode.id);
+    afterEach(() => {
+      return Resource.removeAsync(Url.Registration, 'nodes', testNode.id);
     });
 
     // test cases

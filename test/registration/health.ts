@@ -1,5 +1,5 @@
-import { Hooks } from './../util/hooks';
 import { Registration } from './../util/registration';
+import { Resource } from './../util/resource';
 import { Url } from './../util/url';
 
 import loadJsonFile = require('load-json-file');
@@ -12,12 +12,12 @@ describe('Registration', () => {
     describe('node is existing', () => {
 
       // hooks
-      before((done) => {
-        Hooks.addResource(done, Url.Registration, 'node', testNode);
+      before(() => {
+        return Resource.addAsync(Url.Registration, 'node', testNode);
       });
 
-      after((done) => {
-        Hooks.removeResource(done, Url.Registration, 'nodes', testNode.id);
+      after(() => {
+        return Resource.removeAsync(Url.Registration, 'nodes', testNode.id);
       });
 
       // test cases

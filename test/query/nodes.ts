@@ -1,5 +1,5 @@
-import { Hooks } from './../util/hooks';
 import { Query } from './../util/query';
+import { Resource } from './../util/resource';
 import { Url } from './../util/url';
 
 import loadJsonFile = require('load-json-file');
@@ -10,12 +10,12 @@ describe('Query', () => {
     let testNode = loadJsonFile.sync('./test/resources/node.json');
 
     // hooks
-    before((done) => {
-      Hooks.addResource(done, Url.Registration, 'node', testNode);
+    before(() => {
+      return Resource.addAsync(Url.Registration, 'node', testNode);
     });
 
-    after((done) => {
-      Hooks.removeResource(done, Url.Registration, 'nodes', testNode.id);
+    after(() => {
+      return Resource.removeAsync(Url.Registration, 'nodes', testNode.id);
     });
 
     // test cases
