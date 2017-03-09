@@ -21,7 +21,6 @@
     "@types/chai": "^3.4.34",
     "@types/chai-http": "0.0.29",
     "@types/chai-json-schema": "^1.4.2",
-    "@types/es6-promise": "0.0.32",
     "@types/load-json-file": "^2.0.5",
     "@types/mocha": "^2.2.33",
     "@types/tv4": "^1.2.28",
